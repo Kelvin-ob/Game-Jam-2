@@ -920,6 +920,7 @@ GameObject:
   - component: {fileID: 596906172}
   - component: {fileID: 596906173}
   - component: {fileID: 596906169}
+  - component: {fileID: 596906174}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -1083,6 +1084,7 @@ MonoBehaviour:
   gameInput: {fileID: 1749905429}
   cam: {fileID: 1381074365}
   controller: {fileID: 596906170}
+  footSteps: {fileID: 596906174}
   groundCheck: {fileID: 869927295}
   playerBody: {fileID: 596906171}
   moveSpeed: 2.5
@@ -1114,6 +1116,33 @@ MonoBehaviour:
   InteractRange: 2.5
   crosshair: {fileID: 1578791789}
   crosshairtargethit: {fileID: 1083820311}
+--- !u!114 &596906174
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 596906168}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 31876afdbfa725a408b891c52d24af26, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::FootSteps
+  audioSource: {fileID: 596906169}
+  surfaceTypes:
+  - surfaceTag: Tile
+    footstepSounds:
+    - {fileID: 8300000, guid: 8c2c6c300bd8fc441878f426377bec64, type: 3}
+    - {fileID: 8300000, guid: 14ae706fef2303e4cb71112dbd5d250b, type: 3}
+    - {fileID: 8300000, guid: b995bc1775ea83b4b8f861763e9a1424, type: 3}
+    - {fileID: 8300000, guid: d15f7338d693f0343843a6b9096d27f6, type: 3}
+  stepIntervalWalk: 0.4
+  stepIntervalSprint: 0.7
+  RayStart: {fileID: 869927295}
+  range: 1
+  layerMask:
+    serializedVersion: 2
+    m_Bits: 64
 --- !u!1 &720457364
 GameObject:
   m_ObjectHideFlags: 0
@@ -2617,7 +2646,7 @@ GameObject:
   - component: {fileID: 1658645892}
   m_Layer: 6
   m_Name: Plane
-  m_TagString: Untagged
+  m_TagString: Tile
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
