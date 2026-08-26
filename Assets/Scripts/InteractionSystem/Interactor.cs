@@ -1,3 +1,4 @@
+using DialogueEditor;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -14,6 +15,8 @@ public class Interactor : MonoBehaviour
 
     public Transform InteractorSource;
     [SerializeField] public float InteractRange;
+    [SerializeField] private GameObject crosshair;
+    [SerializeField] private GameObject crosshairtargethit;
 
     private IInteractable currentInteractable; // what player is looking at in the moment
 
@@ -31,6 +34,11 @@ public class Interactor : MonoBehaviour
     void Update()
     {
 
+        if (ConversationManager.Instance != null && ConversationManager.Instance.IsConversationActive) // so that no  interaction triggers the same dialogue instantly
+        {
+            return;
+        }
+
         if (currentInteractable is MonoBehaviour mb && mb == null) //echter unity Objektyp (sauwy needed help here)
         {
             currentInteractable = null;
@@ -40,7 +48,8 @@ public class Interactor : MonoBehaviour
         bool hitSomething = Physics.Raycast(ray, out RaycastHit hitInfo, InteractRange);
 
         IInteractable hitInteractable = null;
-        if (hitSomething)
+
+        if (hitSomething) // if somethin is found get try to get the component (cube, npc etc.)
         {
             hitInfo.collider.gameObject.TryGetComponent(out hitInteractable);
         }
@@ -51,6 +60,9 @@ public class Interactor : MonoBehaviour
             currentInteractable = hitInteractable;
             currentInteractable?.OnFocus();
         }
+
+        crosshairtargethit.SetActive(currentInteractable != null); // show crosshair only when there is somethin interactable
+        crosshair.SetActive(true); 
 
         if (Keyboard.current.eKey.wasPressedThisFrame && currentInteractable != null)
         {
