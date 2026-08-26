@@ -7,6 +7,7 @@ public class Player : MonoBehaviour
     [SerializeField] private GameInput gameInput;
     [SerializeField] private CinemachineCamera cam;
     [SerializeField] private CharacterController controller;
+    [SerializeField] private FootSteps footSteps;
     [SerializeField] private Transform groundCheck;
     [SerializeField] private Transform playerBody;
 
@@ -110,6 +111,40 @@ public class Player : MonoBehaviour
         {
             transform.position = new Vector3(transform.position.x, 0f, transform.position.z);
             velocity.y = Mathf.Max(velocity.y, 0f);
+        }
+
+        if (isGrounded && isMoving)
+        {
+            if (isMoving) // If player is walking
+            {
+                stepTimer += Time.deltaTime;
+                float interval = stepInterval;
+
+                if (isSprinting && !isCrouching)
+                {
+                    if (stepTimer >= sprintStepMultiplier)
+                    {
+                        footSteps.FootStep();
+
+                        interval *= sprintStepMultiplier;
+                        stepTimer = interval;
+                    }
+                }
+                else if (!isSprinting && isCrouching)
+                {
+                    interval *= crouchStepMultiplier;
+                    stepTimer = interval;
+                }
+                else
+                {
+                    if (stepTimer >= sprintStepMultiplier)
+                    {
+                        footSteps.FootStep();
+
+                        stepTimer = 0f;
+                    }
+                }
+            }
         }
 
     }
