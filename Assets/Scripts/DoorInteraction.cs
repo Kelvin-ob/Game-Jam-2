@@ -1,5 +1,5 @@
-using System.Collections;
 using UnityEngine;
+using System.Collections;
 
 public class DoorInteraction : MonoBehaviour, IInteractable
 {
@@ -10,36 +10,44 @@ public class DoorInteraction : MonoBehaviour, IInteractable
     [Header("Interaction")]
     [SerializeField] private string promptText = "open";
 
-    [SerializeField] private string requiredItemId = "keycard";
-    [SerializeField] private string lockedMessage = "You need a keycard";
+    [Header("Swipe Card Lock (optional)")]
+    [SerializeField] private bool requiresUnlock = false;
+    [SerializeField] private string lockedMessage = "You need to swipe your card first";
 
+    [Header("Direct Item Requirement (optional)")]
+    [SerializeField] private string requiredItemId = ""; // z.B. "crowbar", leer lassen wenn nicht gebraucht
+    [SerializeField] private string missingItemMessage = "You need a crowbar";
 
+    private bool isUnlocked = false;
     private bool isOpen = false;
     private bool isMoving = false;
-
+    private bool isFocused = false;
     private Quaternion closedRotation;
     private Quaternion openRotation;
-
     private Coroutine currentCoroutine;
 
     private void Start()
     {
         closedRotation = transform.rotation;
-
-        openRotation = Quaternion.Euler(
-            transform.eulerAngles + new Vector3(0, openAngle, 0)
-        );
+        openRotation = Quaternion.Euler(transform.eulerAngles + new Vector3(0, openAngle, 0));
     }
 
     public void Interact()
     {
-        if (!InventoryManager.Instance.HasItem(requiredItemId))
+        // Swipe-Card Sperre (z.B. Hauptt�r)
+        if (requiresUnlock && !isUnlocked)
         {
-            StartCoroutine(ShowLockedMessage());
+            StartCoroutine(ShowMessage(lockedMessage));
             return;
         }
 
-        // Während die Tür sich bewegt, nichts machen
+        // Direkte Item-Sperre (z.B. Spind + Crowbar)
+        if (!string.IsNullOrEmpty(requiredItemId) && !InventoryManager.Instance.HasItem(requiredItemId))
+        {
+            StartCoroutine(ShowMessage(missingItemMessage));
+            return;
+        }
+
         if (isMoving)
             return;
 
@@ -47,56 +55,56 @@ public class DoorInteraction : MonoBehaviour, IInteractable
             StopCoroutine(currentCoroutine);
 
         currentCoroutine = StartCoroutine(ToggleDoor());
-        if (isOpen)
-        {
-            promptText = "close";
-        }
-        else
-        {
-            promptText = "open";
-        }
+
+        promptText = isOpen ? "close" : "open";
+    }
+
+    // wird vom CardSwiper aufgerufen
+    public void Unlock()
+    {
+        isUnlocked = true;
     }
 
     public void OnFocus()
     {
+        isFocused = true;
         InteractPromptManager.Instance.showPrompt(promptText);
     }
 
     public void OnLoseFocus()
     {
+        isFocused = false;
         InteractPromptManager.Instance.hidePrompt();
     }
 
-    private IEnumerator ShowLockedMessage()
+    private IEnumerator ShowMessage(string message)
     {
-        InteractPromptManager.Instance.showPrompt(lockedMessage);
+        InteractPromptManager.Instance.showPrompt(message);
         yield return new WaitForSeconds(2f);
-        InteractPromptManager.Instance.showPrompt(promptText);
+
+        if (isFocused)
+        {
+            InteractPromptManager.Instance.showPrompt(promptText);
+        }
+        else
+        {
+            InteractPromptManager.Instance.hidePrompt();
+        }
     }
 
-    private IEnumerator ToggleDoor() // door toggle öffnen sequence
+    private IEnumerator ToggleDoor()
     {
         isMoving = true;
-
-        Quaternion targetRotation = isOpen
-            ? closedRotation
-            : openRotation;
-
+        Quaternion targetRotation = isOpen ? closedRotation : openRotation;
         isOpen = !isOpen;
 
         while (Quaternion.Angle(transform.rotation, targetRotation) > 0.01f)
         {
-            transform.rotation = Quaternion.Lerp(
-                transform.rotation,
-                targetRotation,
-                Time.deltaTime * openSpeed
-            );
-
+            transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, Time.deltaTime * openSpeed);
             yield return null;
         }
 
         transform.rotation = targetRotation;
-
         isMoving = false;
         currentCoroutine = null;
     }
