@@ -10,6 +10,10 @@ public class DoorInteraction : MonoBehaviour, IInteractable
     [Header("Interaction")]
     [SerializeField] private string promptText = "open";
 
+    [SerializeField] private string requiredItemId = "keycard";
+    [SerializeField] private string lockedMessage = "You need a keycard";
+
+
     private bool isOpen = false;
     private bool isMoving = false;
 
@@ -29,6 +33,12 @@ public class DoorInteraction : MonoBehaviour, IInteractable
 
     public void Interact()
     {
+        if (!InventoryManager.Instance.HasItem(requiredItemId))
+        {
+            StartCoroutine(ShowLockedMessage());
+            return;
+        }
+
         // Während die Tür sich bewegt, nichts machen
         if (isMoving)
             return;
@@ -57,7 +67,14 @@ public class DoorInteraction : MonoBehaviour, IInteractable
         InteractPromptManager.Instance.hidePrompt();
     }
 
-    private IEnumerator ToggleDoor()
+    private IEnumerator ShowLockedMessage()
+    {
+        InteractPromptManager.Instance.showPrompt(lockedMessage);
+        yield return new WaitForSeconds(2f);
+        InteractPromptManager.Instance.showPrompt(promptText);
+    }
+
+    private IEnumerator ToggleDoor() // door toggle öffnen sequence
     {
         isMoving = true;
 
