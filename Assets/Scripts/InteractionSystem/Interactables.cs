@@ -2,13 +2,16 @@ using UnityEngine;
 
 public class Interactables : MonoBehaviour, IInteractable
 {
+
+    [TextArea(2, 5)]
+    [SerializeField] private string promptText = "custom text"; //customisable inside unity
+
     private MeshRenderer meshRenderer;
-    [SerializeField] private GameObject interactPrompt; // later texts like: "press E to interact"
+   
 
     void Start()
     {
         meshRenderer = GetComponent<MeshRenderer>();
-        interactPrompt.SetActive(false); // anfang unsichtbar
     }
 
     public void Interact()
@@ -20,11 +23,11 @@ public class Interactables : MonoBehaviour, IInteractable
 
     public void OnFocus()
     {
-        interactPrompt.SetActive(true);
+        InteractPromptManager.Instance.showPrompt(promptText);
     }
 
     public void OnLoseFocus()
     {
-        interactPrompt.SetActive(false);
+        InteractPromptManager.Instance.hidePrompt();
     }
 }

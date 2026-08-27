@@ -3,13 +3,13 @@ using UnityEngine;
 public class PickupItem : MonoBehaviour, IInteractable
 {
     [SerializeField] private string itemId; //example: "secret_room_key"
-    [SerializeField] private GameObject interactPrompt;
+    
+    [TextArea(2, 5)]
+    [SerializeField] private string promptText = "custom text"; //customisable inside unity
 
 
-    void Start()
-    {
-        interactPrompt.SetActive(false);
-    }
+
+  
 
     public void Interact()
     {
@@ -19,11 +19,11 @@ public class PickupItem : MonoBehaviour, IInteractable
 
     public void OnFocus()
     {
-        interactPrompt.SetActive(true);
+        InteractPromptManager.Instance.showPrompt(promptText);
     }
 
     public void OnLoseFocus()
     {
-        interactPrompt.SetActive(false);
+        InteractPromptManager.Instance.hidePrompt();
     }
 }
