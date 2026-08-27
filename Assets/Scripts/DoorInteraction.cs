@@ -5,7 +5,7 @@ public class DoorInteraction : MonoBehaviour, IInteractable
 {
     [Header("Door Settings")]
     [SerializeField] private float openAngle = 90f;
-    [SerializeField] private float openSpeed = 2f;
+    [SerializeField] private float openSpeed = 3f;
 
     [Header("Interaction")]
     [SerializeField] private string promptText = "open";
