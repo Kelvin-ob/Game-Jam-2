@@ -12,6 +12,7 @@ public class InventoryManager : MonoBehaviour
         if (Instance == null)
         {
             Instance = this;
+            DontDestroyOnLoad(gameObject);
         } else
         {
             Destroy(gameObject); // to prevent doubled instances
