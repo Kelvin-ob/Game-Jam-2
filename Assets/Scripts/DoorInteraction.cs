@@ -1,47 +1,86 @@
-using System;
 using System.Collections;
 using UnityEngine;
-using UnityEngine.InputSystem;
 
-public class DoorInteraction : MonoBehaviour
+public class DoorInteraction : MonoBehaviour, IInteractable
 {
+    [Header("Door Settings")]
+    [SerializeField] private float openAngle = 90f;
+    [SerializeField] private float openSpeed = 2f;
 
-    public float openAngle = 90f; //how far we can open
-    public float openSpeed = 2f;
-    public bool isOpen = false;
+    [Header("Interaction")]
+    [SerializeField] private string promptText = "open";
 
-    private Quaternion _closedRotation;
-    private Quaternion _openRotation;
-    private Coroutine _currentCoroutine;
+    private bool isOpen = false;
+    private bool isMoving = false;
 
+    private Quaternion closedRotation;
+    private Quaternion openRotation;
 
-    void Start()
+    private Coroutine currentCoroutine;
+
+    private void Start()
     {
-        _closedRotation = transform.rotation;
-        _openRotation = Quaternion.Euler(transform.eulerAngles + new Vector3(0, openAngle, 0)); //calculate open position
+        closedRotation = transform.rotation;
+
+        openRotation = Quaternion.Euler(
+            transform.eulerAngles + new Vector3(0, openAngle, 0)
+        );
     }
 
-    
-    void Update()
+    public void Interact()
     {
-        if (Keyboard.current.eKey.wasPressedThisFrame)
+        // Während die Tür sich bewegt, nichts machen
+        if (isMoving)
+            return;
+
+        if (currentCoroutine != null)
+            StopCoroutine(currentCoroutine);
+
+        currentCoroutine = StartCoroutine(ToggleDoor());
+        if (isOpen)
         {
-            if (_currentCoroutine != null) StopCoroutine(_currentCoroutine);
-            _currentCoroutine = StartCoroutine(ToggleDoor());
+            promptText = "close";
         }
+        else
+        {
+            promptText = "open";
+        }
+    }
+
+    public void OnFocus()
+    {
+        InteractPromptManager.Instance.showPrompt(promptText);
+    }
+
+    public void OnLoseFocus()
+    {
+        InteractPromptManager.Instance.hidePrompt();
     }
 
     private IEnumerator ToggleDoor()
     {
-        Quaternion targetRotation = isOpen ? _closedRotation : _openRotation;
+        isMoving = true;
+
+        Quaternion targetRotation = isOpen
+            ? closedRotation
+            : openRotation;
+
         isOpen = !isOpen;
 
         while (Quaternion.Angle(transform.rotation, targetRotation) > 0.01f)
         {
-            transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, Time.deltaTime * openSpeed);
+            transform.rotation = Quaternion.Lerp(
+                transform.rotation,
+                targetRotation,
+                Time.deltaTime * openSpeed
+            );
+
             yield return null;
         }
 
         transform.rotation = targetRotation;
+
+        isMoving = false;
+        currentCoroutine = null;
     }
 }
