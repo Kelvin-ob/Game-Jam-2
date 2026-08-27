@@ -5,13 +5,11 @@ using UnityEngine.InputSystem;
 public class ConversationStarter : MonoBehaviour, IInteractable
 {
     [SerializeField] private NPCConversation TheConversation;
-    [SerializeField] private GameObject interactPrompt;
+    
+    [TextArea(2, 5)]
+    [SerializeField] private string promptText = "Press E"; //customisable inside unity
 
-    void Start()
-    {
-        interactPrompt.SetActive(false);
-    }
-
+    
     public void Interact()
     {
         ConversationManager.Instance.StartConversation(TheConversation);
@@ -27,12 +25,12 @@ public class ConversationStarter : MonoBehaviour, IInteractable
 
     public void OnFocus()
     {
-        interactPrompt.SetActive(true);
+        InteractPromptManager.Instance.showPrompt(promptText);
     }
 
     public void OnLoseFocus()
     {
-        interactPrompt.SetActive(false);
+        InteractPromptManager.Instance.hidePrompt();
     }
 
 

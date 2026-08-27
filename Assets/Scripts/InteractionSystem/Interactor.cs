@@ -51,7 +51,7 @@ public class Interactor : MonoBehaviour
 
         if (hitSomething) // if somethin is found get try to get the component (cube, npc etc.)
         {
-            hitInfo.collider.gameObject.TryGetComponent(out hitInteractable);
+            hitInteractable = hitInfo.collider.GetComponentInParent<IInteractable>();
         }
 
         if (hitInteractable != currentInteractable)
