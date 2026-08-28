@@ -336,6 +336,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PickupItem
   itemId: keycard
   promptText: '"pick up"'
+  playVoiceOnPickup: 0
+  voiceDelay: 1
+  voiceLines: []
+  typingSpeed: 0.05
+  displayDuration: 3
+  timeBetweenLines: 1
 --- !u!1001 &108704927
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3501,7 +3507,7 @@ Transform:
   m_GameObject: {fileID: 988521762}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 2.06, y: 0.45, z: -6.45}
+  m_LocalPosition: {x: 2.06, y: 0.45, z: -11.65}
   m_LocalScale: {x: 3.3282812, y: 1.053, z: 2.4093692}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -3520,15 +3526,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::VoiceTrigger
   triggerOnce: 1
-  dialogueLines:
-  - crowbar, huh? NIceee
-  - Great
+  dialogueLines: []
   typingSpeed: 0.05
   displayDuration: 3
   timeBetweenLines: 1
   requiredTriggers: []
-  requiredItems:
-  - crowbar
+  requiredItems: []
   player: {fileID: 596906172}
   lockMovement: 0
 --- !u!65 &988521765
@@ -6949,9 +6952,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::VoiceManager
   voiceText: {fileID: 1148286538}
+  displayDuration: 3
+  typingSpeed: 0.05
   typewriterAudio: {fileID: 1998330156}
   typewriterSound: {fileID: 8300000, guid: 3de300118169f1344a7b80ab73671764, type: 3}
-  soundVolume: 0.35
+  typewriterSoundInterval: 1
 --- !u!4 &1998330155
 Transform:
   m_ObjectHideFlags: 0
@@ -6980,7 +6985,7 @@ AudioSource:
   m_audioClip: {fileID: 0}
   m_Resource: {fileID: 0}
   m_PlayOnAwake: 0
-  m_Volume: 1
+  m_Volume: 0.4
   m_Pitch: 0.9
   Loop: 0
   Mute: 0
@@ -8066,6 +8071,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PickupItem
   itemId: crowbar
   promptText: '"pick up"'
+  playVoiceOnPickup: 1
+  voiceDelay: 1
+  voiceLines:
+  - Nice could be used for somethin
+  typingSpeed: 0.05
+  displayDuration: 3
+  timeBetweenLines: 1
 --- !u!33 &4657049078715099331
 MeshFilter:
   m_ObjectHideFlags: 0

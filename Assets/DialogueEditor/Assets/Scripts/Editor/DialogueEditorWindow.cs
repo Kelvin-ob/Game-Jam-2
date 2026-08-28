@@ -108,6 +108,7 @@ namespace DialogueEditor
         }
 
         [UnityEditor.Callbacks.OnOpenAsset(1)]
+        [System.Obsolete]
         public static bool OpenDialogue(int assetInstanceID, int line)
         {
             NPCConversation conversation = EditorUtility.InstanceIDToObject(assetInstanceID) as NPCConversation;
