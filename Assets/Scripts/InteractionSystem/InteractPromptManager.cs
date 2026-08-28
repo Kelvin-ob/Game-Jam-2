@@ -1,4 +1,3 @@
-using JetBrains.Annotations;
 using TMPro;
 using UnityEngine;
 
@@ -11,16 +10,10 @@ public class InteractPromptManager : MonoBehaviour
 
     private void Awake()
     {
-        if (Instance == null)
-        {
-            Instance = this;
-            DontDestroyOnLoad(gameObject);
-        } else
-        {
-            Destroy(gameObject);
-        } 
+        Instance = this;
     }
-    void Start()
+
+    private void Start()
     {
         promptRoot.SetActive(false);
     }
@@ -35,6 +28,4 @@ public class InteractPromptManager : MonoBehaviour
     {
         promptRoot.SetActive(false);
     }
-
-    
 }

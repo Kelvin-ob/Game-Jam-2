@@ -7,6 +7,9 @@ public class DoorInteraction : MonoBehaviour, IInteractable
     [SerializeField] private float openAngle = 90f;
     [SerializeField] private float openSpeed = 3f;
 
+    [Header("Door State")]
+    [SerializeField] private string doorId;
+
     [Header("Interaction")]
     [SerializeField] private string promptText = "open";
     [SerializeField] private string sceneToLoad = "";
@@ -37,6 +40,13 @@ public class DoorInteraction : MonoBehaviour, IInteractable
         openRotation = Quaternion.Euler(
             transform.eulerAngles + new Vector3(0, openAngle, 0)
         );
+
+        // Gespeicherten Unlock-Zustand laden
+        if (GameStateManager.Instance != null &&
+            GameStateManager.Instance.IsDoorUnlocked(doorId))
+        {
+            isUnlocked = true;
+        }
     }
 
     public void Interact()
@@ -78,6 +88,8 @@ public class DoorInteraction : MonoBehaviour, IInteractable
     public void Unlock()
     {
         isUnlocked = true;
+
+        GameStateManager.Instance.SetDoorUnlocked(doorId);
     }
 
     public void OnFocus()

@@ -262,7 +262,7 @@ GameObject:
   - component: {fileID: 57793359}
   - component: {fileID: 57793358}
   m_Layer: 0
-  m_Name: GameObject
+  m_Name: VentFade
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -280,12 +280,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 658c16a796665f2499bfcb90cd1df49f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DoorInteraction
-  openAngle: 0
+  openAngle: 1
   openSpeed: 3
+  doorId: OperationVent
   promptText: open
   sceneToLoad: Generator
   fadeDuration: 1
-  transitionDelay: 0.1
+  transitionDelay: 0.01
   requiresUnlock: 0
   lockedMessage: 
   requiredItemId: crowbar
@@ -3393,6 +3394,50 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 6328248846279482177, guid: 8974264e38648524ea90a5d981a2a75e, type: 3}
   m_PrefabInstance: {fileID: 1059343350}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1020410716
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1020410718}
+  - component: {fileID: 1020410717}
+  m_Layer: 0
+  m_Name: GameStateManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1020410717
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1020410716}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 79b63e2b0934ddd489ba11b681a4f9a1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::GameStateManager
+--- !u!4 &1020410718
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1020410716}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 3.62139, y: 0.3505, z: -5.05871}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &1036324432 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6328248846279482177, guid: 8974264e38648524ea90a5d981a2a75e, type: 3}
@@ -4111,6 +4156,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::DoorInteraction
   openAngle: -90
   openSpeed: 3
+  doorId: 
   promptText: open
   sceneToLoad: 
   fadeDuration: 1
@@ -6312,6 +6358,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::DoorInteraction
   openAngle: 90
   openSpeed: 1
+  doorId: OperationDoor
   promptText: open
   sceneToLoad: Hallway
   fadeDuration: 1
@@ -8541,6 +8588,7 @@ BoxCollider:
 SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
+  - {fileID: 1020410718}
   - {fileID: 1553222850}
   - {fileID: 410087041}
   - {fileID: 832575519}
@@ -8558,5 +8606,5 @@ SceneRoots:
   - {fileID: 8579061400185382758}
   - {fileID: 258499632358451863}
   - {fileID: 1207367180}
-  - {fileID: 850747583}
   - {fileID: 57793359}
+  - {fileID: 850747583}

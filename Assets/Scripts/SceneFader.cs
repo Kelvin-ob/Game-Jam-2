@@ -15,7 +15,7 @@ public class SceneFader : MonoBehaviour
 
     public void FadeAndLoad(string sceneName, float duration)
     {
-        player.enabled = false; 
+        player.enabled = false;  
         StartCoroutine(Fader(sceneName, duration));
 
     }
