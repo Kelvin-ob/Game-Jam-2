@@ -120,7 +120,7 @@ Material:
     - _RefValue: 0
     m_Floats:
     - _AddPrecomputedVelocity: 0
-    - _AdditionalLights: 1
+    - _AdditionalLights: 2
     - _AdditionalLightsPerVertex: 1
     - _AffineMappingStrength: 1
     - _AffineMappingToggle: 0
