@@ -167,7 +167,7 @@ Material:
     - _GlossMapScale: 0
     - _Glossiness: 0
     - _GlossyReflections: 0
-    - _LightModel: 1
+    - _LightModel: 2
     - _MatSmoothness: 1
     - _MaxDrawDistance: 50
     - _Metallic: 0
