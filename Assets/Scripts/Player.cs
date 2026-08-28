@@ -31,6 +31,7 @@ public class Player : MonoBehaviour
     Vector3 velocity;
     bool isGrounded;
     private float stepTimer;
+    private bool movementEnabled = true;
 
     public bool IsSprinting => gameInput.getIsSprinting();
     public bool IsCrouching => gameInput.getIsCrouching();
@@ -43,7 +44,13 @@ public class Player : MonoBehaviour
 
     void Update()
     {
+        if (!movementEnabled)
+        {
+            return; 
+        }
+
         HandleMovement();
+
     }
 
     private void HandleMovement()
@@ -147,5 +154,10 @@ public class Player : MonoBehaviour
             }
         }
 
+    }
+
+    public void SetMovementEnabled(bool enabled)
+    {
+        movementEnabled = enabled;
     }
 }
