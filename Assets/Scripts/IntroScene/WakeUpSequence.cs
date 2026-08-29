@@ -27,8 +27,27 @@ public class WakeUpSequence : MonoBehaviour
     [SerializeField] private float wakeUpDuration = 3f;
     [SerializeField] private float movementLockDuration = 5f;
 
+    [Header("Save State")]
+    [SerializeField] private string wakeUpStateId = "operation_room_wakeup";
+
     private void Start()
     {
+        // Prüfen, ob das Aufwachen bereits einmal abgespielt wurde
+        if (GameStateManager.Instance != null &&
+            GameStateManager.Instance.IsItemCollected(wakeUpStateId))
+        {
+            // Aufwachen überspringen
+            player.SetMovementEnabled(true);
+            return;
+        }
+
+        // Sofort speichern, dass das Aufwachen gestartet wurde.
+        // Dadurch wird es auch nach einem Szenenwechsel nicht erneut abgespielt.
+        if (GameStateManager.Instance != null)
+        {
+            GameStateManager.Instance.SetItemCollected(wakeUpStateId);
+        }
+
         StartCoroutine(WakeUp());
     }
 
@@ -37,7 +56,7 @@ public class WakeUpSequence : MonoBehaviour
         // Spieler kann sich nicht bewegen
         player.SetMovementEnabled(false);
 
-        // Warten, bis das Aufwachen vorbei ist
+        // Warten, bis die Aufwachbewegung vorbei ist
         yield return new WaitForSeconds(wakeUpDuration);
 
         // Dialog Zeile für Zeile anzeigen
@@ -46,14 +65,13 @@ public class WakeUpSequence : MonoBehaviour
             if (string.IsNullOrWhiteSpace(line))
                 continue;
 
-            // Voice mit den Einstellungen der WakeUpSequence starten
             VoiceManager.Instance.ShowVoice(
                 line,
                 typingSpeed,
                 displayDuration
             );
 
-            // Warten, bis die Voice komplett fertig ist
+            // Warten, bis die aktuelle Voice komplett fertig ist
             yield return new WaitUntil(
                 () => !VoiceManager.Instance.IsVoiceActive
             );
@@ -62,7 +80,7 @@ public class WakeUpSequence : MonoBehaviour
             yield return new WaitForSeconds(timeBetweenLines);
         }
 
-        // Movement Lock insgesamt berücksichtigen
+        // Movement Lock berücksichtigen
         float remainingTime = movementLockDuration - wakeUpDuration;
 
         if (remainingTime > 0f)
