@@ -281,7 +281,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DoorInteraction
   openAngle: 1
-  openSpeed: 3
+  openSpeed: 1
   doorId: OperationVent
   openSound: {fileID: 8300000, guid: ed89f6fa172ade042a5cb4867cfa06db, type: 3}
   openVolume: 1
@@ -6159,7 +6159,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &1683516945
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6187,7 +6187,7 @@ MonoBehaviour:
   displayDuration: 3
   timeBetweenLines: 0.5
   wakeUpDuration: 3
-  movementLockDuration: 5
+  movementLockDuration: 4
   wakeUpStateId: operation_room_wakeup
 --- !u!4 &1683516946
 Transform:
