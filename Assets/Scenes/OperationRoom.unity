@@ -342,6 +342,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PickupItem
   itemId: keycard
+  gunToEnable: {fileID: 0}
   promptText: '"pick up"'
   pickupSound: {fileID: 8300000, guid: 154f842c11ac6b749bead037e4e8a245, type: 3}
   pickupVolume: 0.12
@@ -6158,7 +6159,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1683516945
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8168,6 +8169,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PickupItem
   itemId: crowbar
+  gunToEnable: {fileID: 0}
   promptText: '"pick up"'
   pickupSound: {fileID: 8300000, guid: 154f842c11ac6b749bead037e4e8a245, type: 3}
   pickupVolume: 0.12

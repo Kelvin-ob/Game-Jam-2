@@ -10,16 +10,6 @@ public class GameStateManager : MonoBehaviour
     private HashSet<string> filledGenerators = new HashSet<string>();
     private HashSet<string> activatedGenerators = new HashSet<string>();
 
-    public static GameStateManager EnsureInstance()
-    {
-        if (Instance != null)
-            return Instance;
-
-        GameObject managerObject = new GameObject("GameStateManager");
-        Instance = managerObject.AddComponent<GameStateManager>();
-        return Instance;
-    }
-
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -29,6 +19,7 @@ public class GameStateManager : MonoBehaviour
         }
 
         Instance = this;
+        DontDestroyOnLoad(gameObject);
     }
 
     // =========================
@@ -87,4 +78,3 @@ public class GameStateManager : MonoBehaviour
         return activatedGenerators.Contains(generatorId);
     }
 }
-

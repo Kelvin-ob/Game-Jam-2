@@ -7,16 +7,6 @@ public class InventoryManager : MonoBehaviour
 
     private HashSet<string> collectedItems = new HashSet<string>();
 
-    public static InventoryManager EnsureInstance()
-    {
-        if (Instance != null)
-            return Instance;
-
-        GameObject managerObject = new GameObject("InventoryManager");
-        Instance = managerObject.AddComponent<InventoryManager>();
-        return Instance;
-    }
-
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -26,6 +16,7 @@ public class InventoryManager : MonoBehaviour
         }
 
         Instance = this;
+        DontDestroyOnLoad(gameObject);
     }
 
     public void AddItem(string itemId)

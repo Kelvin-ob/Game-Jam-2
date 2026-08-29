@@ -201,18 +201,14 @@ public class GeneratorInteraction : MonoBehaviour, IInteractable
             refuelAudioSource.clip == null)
             return;
 
-        // Soundposition anhand des Progress setzen
-        float targetTime =
-            refuelProgress * refuelAudioSource.clip.length;
+        if (refuelAudioSource.clip.length <= 0.01f)
+            return;
 
-        // Soundposition aktualisieren
-        refuelAudioSource.time = Mathf.Clamp(
-            targetTime,
-            0f,
-            refuelAudioSource.clip.length - 0.01f
-        );
+        float maxValidTime = Mathf.Max(0f, refuelAudioSource.clip.length - 0.01f);
+        float targetTime = refuelProgress * refuelAudioSource.clip.length;
 
-        // Sound starten, falls er nicht läuft
+        refuelAudioSource.time = Mathf.Clamp(targetTime, 0f, maxValidTime);
+
         if (!refuelAudioSource.isPlaying)
         {
             refuelAudioSource.Play();
@@ -248,10 +244,10 @@ public class GeneratorInteraction : MonoBehaviour, IInteractable
         isFilled = true;
         refuelProgress = 1f;
 
-        // Sound exakt ans Ende setzen
-        if (refuelAudioSource != null)
+        if (refuelAudioSource != null && refuelAudioSource.clip != null)
         {
-            refuelAudioSource.time = refuelAudioSource.clip.length;
+            float maxValidTime = Mathf.Max(0f, refuelAudioSource.clip.length - 0.01f);
+            refuelAudioSource.time = maxValidTime;
 
             if (refuelAudioSource.isPlaying)
             {
