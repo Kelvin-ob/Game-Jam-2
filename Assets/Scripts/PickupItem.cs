@@ -3,6 +3,7 @@
 public class PickupItem : MonoBehaviour, IInteractable
 {
     [SerializeField] private string itemId;
+    [SerializeField] private GunHandler gunToEnable;
 
     [TextArea(2, 5)]
     [SerializeField] private string promptText = "custom text";
@@ -13,6 +14,11 @@ public class PickupItem : MonoBehaviour, IInteractable
         if (GameStateManager.Instance != null &&
             GameStateManager.Instance.IsItemCollected(itemId))
         {
+            if (gunToEnable != null)
+            {
+                gunToEnable.Pickup();
+            }
+
             Destroy(gameObject);
         }
     }
@@ -23,6 +29,11 @@ public class PickupItem : MonoBehaviour, IInteractable
 
         // Item als eingesammelt speichern
         GameStateManager.Instance.SetItemCollected(itemId);
+
+        if (gunToEnable != null)
+        {
+            gunToEnable.Pickup();
+        }
 
         // Prompt entfernen
         InteractPromptManager.Instance.hidePrompt();

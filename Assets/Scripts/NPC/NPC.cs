@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.AI;
 
-public class EnemyAI : MonoBehaviour
+public class NPC : MonoBehaviour
 {
     public enum EnemyState
     {
@@ -16,6 +16,9 @@ public class EnemyAI : MonoBehaviour
     [SerializeField] private NavMeshAgent agent;
     [SerializeField] private Transform player;
     [SerializeField] private Animator animator;
+    public bool openDoor;
+
+
 
     [Header("Jumpscare")]
     [SerializeField] private Transform jumpscarePosition;
@@ -32,12 +35,10 @@ public class EnemyAI : MonoBehaviour
     [Header("Health")]
     [SerializeField] private int health = 1;
 
-    [Header("Death / Ragdoll")]
-    [SerializeField] private Rigidbody[] ragdollRigidbodies;
-    [SerializeField] private Collider[] ragdollColliders;
-    [SerializeField] private Collider mainCollider;
+    [SerializeField] private string sceneToLoad = "";
 
     private EnemyState currentState = EnemyState.Idle;
+    private Collider npcCollider;
 
     private bool sequenceStarted = false;
 
@@ -55,18 +56,12 @@ public class EnemyAI : MonoBehaviour
                 player = playerObject.transform;
         }
 
-        // Ragdoll deaktivieren
-        foreach (Rigidbody rb in ragdollRigidbodies)
-        {
-            rb.isKinematic = true;
-        }
-
-        foreach (Collider col in ragdollColliders)
-        {
-            col.enabled = false;
-        }
+        npcCollider = GetComponent<Collider>();
+        if (npcCollider == null)
+            npcCollider = GetComponentInChildren<Collider>();
 
         // Startzustand
+        openDoor = false;
         SetRunning(false);
     }
 
@@ -186,6 +181,7 @@ public class EnemyAI : MonoBehaviour
         agent.speed = chaseSpeed;
 
         SetRunning(true);
+        openDoor = true;
 
         Debug.Log("CHASE START!");
     }
@@ -223,49 +219,9 @@ public class EnemyAI : MonoBehaviour
 
         Debug.Log("Spieler wurde erwischt!");
 
-        RespawnPlayer();
+        changeScene();
+        openDoor = false;
     }
-
-
-    private void RespawnPlayer()
-    {
-        if (player == null || respawnPoint == null)
-            return;
-
-        CharacterController controller =
-            player.GetComponent<CharacterController>();
-
-        if (controller != null)
-            controller.enabled = false;
-
-        player.position = respawnPoint.position;
-        player.rotation = respawnPoint.rotation;
-
-        if (controller != null)
-            controller.enabled = true;
-
-        Debug.Log("Spieler respawnt!");
-
-        ResetNpcToJumpscarePosition();
-    }
-
-    private void ResetNpcToJumpscarePosition()
-    {
-        if (agent != null)
-        {
-            agent.isStopped = true;
-            agent.ResetPath();
-        }
-
-        currentState = EnemyState.Jumpscare;
-        SetRunning(false);
-        sequenceStarted = false;
-
-        Debug.Log("NPC zurück zur Jumpscare-Position!");
-
-        StartSequence();
-    }
-
 
     // =========================================================
     // DAMAGE
@@ -298,9 +254,7 @@ public class EnemyAI : MonoBehaviour
 
         currentState = EnemyState.Dead;
 
-        SetRunning(false);
-
-        CancelInvoke();
+        animator.SetBool("IsDead", true);
 
         if (agent != null)
         {
@@ -308,31 +262,17 @@ public class EnemyAI : MonoBehaviour
             agent.enabled = false;
         }
 
-        if (mainCollider != null)
-            mainCollider.enabled = false;
+        Collider[] colliders = GetComponentsInChildren<Collider>();
+        foreach (Collider col in colliders)
+        {
+            col.enabled = false;
+        }
 
-        if (animator != null)
-            animator.enabled = false;
-
-        EnableRagdoll();
+        if (npcCollider != null)
+            npcCollider.enabled = false;
 
         Debug.Log("Enemy ist tot!");
     }
-
-
-    private void EnableRagdoll()
-    {
-        foreach (Rigidbody rb in ragdollRigidbodies)
-        {
-            rb.isKinematic = false;
-        }
-
-        foreach (Collider col in ragdollColliders)
-        {
-            col.enabled = true;
-        }
-    }
-
 
     // =========================================================
     // ANIMATION
@@ -346,23 +286,30 @@ public class EnemyAI : MonoBehaviour
         animator.SetBool("IsRunning", running);
     }
 
-
-    // =========================================================
-    // DEBUG
-    // =========================================================
-
-    private void OnDrawGizmosSelected()
+    public void stopTrigger()
     {
-        if (jumpscarePosition != null)
-        {
-            Gizmos.color = Color.red;
-            Gizmos.DrawWireSphere(jumpscarePosition.position, 0.3f);
-        }
+        currentState = EnemyState.Idle;
+        SetRunning(false);
 
-        if (respawnPoint != null)
+        if (agent != null)
         {
-            Gizmos.color = Color.green;
-            Gizmos.DrawWireSphere(respawnPoint.position, 0.3f);
+            agent.isStopped = true;
+            agent.ResetPath();
+            agent.enabled = false;
+        }
+    }
+
+    private void changeScene()
+    {
+        SceneFader sceneFader = FindFirstObjectByType<SceneFader>();
+
+        if (sceneFader != null)
+        {
+            sceneFader.FadeAndLoad(sceneToLoad, 0f);
+        }
+        else
+        {
+            Debug.LogError("Kein SceneFader in der Szene gefunden!");
         }
     }
 }

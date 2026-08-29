@@ -8,6 +8,16 @@ public class GameStateManager : MonoBehaviour
     private HashSet<string> collectedItems = new HashSet<string>();
     private HashSet<string> unlockedDoors = new HashSet<string>();
 
+    public static GameStateManager EnsureInstance()
+    {
+        if (Instance != null)
+            return Instance;
+
+        GameObject managerObject = new GameObject("GameStateManager");
+        Instance = managerObject.AddComponent<GameStateManager>();
+        return Instance;
+    }
+
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -17,7 +27,6 @@ public class GameStateManager : MonoBehaviour
         }
 
         Instance = this;
-        DontDestroyOnLoad(gameObject);
     }
 
     // =========================

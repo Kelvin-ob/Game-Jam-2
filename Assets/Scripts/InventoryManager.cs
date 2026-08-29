@@ -3,9 +3,19 @@ using UnityEngine;
 
 public class InventoryManager : MonoBehaviour
 {
-    public static InventoryManager Instance; //global access thats why we use static // instnace is the whole class so that multiple obj can make use of it bc: we can have 20+ items but they all need reference to Inventory
+    public static InventoryManager Instance;
 
     private HashSet<string> collectedItems = new HashSet<string>();
+
+    public static InventoryManager EnsureInstance()
+    {
+        if (Instance != null)
+            return Instance;
+
+        GameObject managerObject = new GameObject("InventoryManager");
+        Instance = managerObject.AddComponent<InventoryManager>();
+        return Instance;
+    }
 
     private void Awake()
     {
@@ -16,7 +26,6 @@ public class InventoryManager : MonoBehaviour
         }
 
         Instance = this;
-        DontDestroyOnLoad(gameObject);
     }
 
     public void AddItem(string itemId)

@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class EnemySequenceTrigger : MonoBehaviour
+public class NPCStopTrigger : MonoBehaviour
 {
     [SerializeField] private NPC enemy;
 
@@ -8,14 +8,15 @@ public class EnemySequenceTrigger : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (triggered)
+        if (triggered || enemy == null)
             return;
 
-        if (!other.CompareTag("Player"))
+        NPC otherNpc = other.GetComponentInParent<NPC>();
+
+        if (otherNpc != enemy)
             return;
 
         triggered = true;
-
-        enemy.StartSequence();
+        enemy.stopTrigger();
     }
 }
