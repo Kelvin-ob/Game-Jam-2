@@ -23,10 +23,17 @@ public class PickupItem : MonoBehaviour, IInteractable
 
     public void Interact()
     {
-        InventoryManager.Instance.AddItem(itemId);
+        // Item ins Inventar hinzufügen
+        if (InventoryManager.Instance != null)
+        {
+            InventoryManager.Instance.AddItem(itemId);
+        }
 
         // Item als eingesammelt speichern
-        GameStateManager.Instance.SetItemCollected(itemId);
+        if (GameStateManager.Instance != null)
+        {
+            GameStateManager.Instance.SetItemCollected(itemId);
+        }
 
         // Sound abspielen
         if (pickupSound != null)
@@ -39,19 +46,29 @@ public class PickupItem : MonoBehaviour, IInteractable
         }
 
         // Prompt entfernen
-        InteractPromptManager.Instance.hidePrompt();
+        if (InteractPromptManager.Instance != null)
+        {
+            InteractPromptManager.Instance.hidePrompt();
+        }
 
+        // Item aus der Szene entfernen
         Destroy(gameObject);
     }
 
     public void OnFocus()
     {
-        InteractPromptManager.Instance.showPrompt(promptText);
+        if (InteractPromptManager.Instance != null)
+        {
+            InteractPromptManager.Instance.showPrompt(promptText);
+        }
     }
 
     public void OnLoseFocus()
     {
-        InteractPromptManager.Instance.hidePrompt();
+        if (InteractPromptManager.Instance != null)
+        {
+            InteractPromptManager.Instance.hidePrompt();
+        }
     }
 }
 

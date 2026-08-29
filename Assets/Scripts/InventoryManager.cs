@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class InventoryManager : MonoBehaviour
 {
-    public static InventoryManager Instance; //global access thats why we use static // instnace is the whole class so that multiple obj can make use of it bc: we can have 20+ items but they all need reference to Inventory
+    public static InventoryManager Instance;
 
     private HashSet<string> collectedItems = new HashSet<string>();
 
@@ -28,5 +28,14 @@ public class InventoryManager : MonoBehaviour
     public bool HasItem(string itemId)
     {
         return collectedItems.Contains(itemId);
+    }
+
+    public void RemoveItem(string itemId)
+    {
+        if (collectedItems.Contains(itemId))
+        {
+            collectedItems.Remove(itemId);
+            Debug.Log("Item removed: " + itemId);
+        }
     }
 }

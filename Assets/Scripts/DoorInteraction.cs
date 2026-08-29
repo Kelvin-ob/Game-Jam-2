@@ -10,6 +10,20 @@ public class DoorInteraction : MonoBehaviour, IInteractable
     [Header("Door State")]
     [SerializeField] private string doorId;
 
+    [Header("Door Sound")]
+    [SerializeField] private AudioClip openSound;
+    [SerializeField][Range(0f, 1f)] private float openVolume = 1f;
+
+    [SerializeField] private AudioClip closeSound;
+    [SerializeField][Range(0f, 1f)] private float closeVolume = 1f;
+
+    [Header("Break Open (optional)")]
+    [SerializeField] private bool breakOpenFirstTime = false;
+    [SerializeField] private AudioClip breakOpenSound;
+    [SerializeField][Range(0f, 1f)] private float breakOpenVolume = 1f;
+
+    private bool hasBeenBrokenOpen = false;
+
     [Header("Interaction")]
     [SerializeField] private string promptText = "open";
     [SerializeField] private string sceneToLoad = "";
@@ -47,6 +61,13 @@ public class DoorInteraction : MonoBehaviour, IInteractable
         {
             isUnlocked = true;
         }
+
+        // Gespeicherten Aufbruch-Zustand laden
+        if (GameStateManager.Instance != null &&
+            GameStateManager.Instance.IsItemCollected(doorId + "_broken"))
+        {
+            hasBeenBrokenOpen = true;
+        }
     }
 
     public void Interact()
@@ -72,7 +93,22 @@ public class DoorInteraction : MonoBehaviour, IInteractable
         if (currentCoroutine != null)
             StopCoroutine(currentCoroutine);
 
-        // Tür mit Scene Transition
+        // =========================
+        // ERSTES AUFBRECHEN
+        // =========================
+
+        if (breakOpenFirstTime && !hasBeenBrokenOpen && !isOpen)
+        {
+            currentCoroutine = StartCoroutine(BreakOpen());
+
+            promptText = "close";
+            return;
+        }
+
+        // =========================
+        // NORMALE TÜR
+        // =========================
+
         if (!isOpen && !string.IsNullOrEmpty(sceneToLoad))
         {
             currentCoroutine = StartCoroutine(OpenAndTransition());
@@ -89,7 +125,10 @@ public class DoorInteraction : MonoBehaviour, IInteractable
     {
         isUnlocked = true;
 
-        GameStateManager.Instance.SetDoorUnlocked(doorId);
+        if (GameStateManager.Instance != null)
+        {
+            GameStateManager.Instance.SetDoorUnlocked(doorId);
+        }
     }
 
     public void OnFocus()
@@ -120,12 +159,29 @@ public class DoorInteraction : MonoBehaviour, IInteractable
         }
     }
 
-    private IEnumerator ToggleDoor()
+    // =========================
+    // BREAK OPEN
+    // =========================
+
+    private IEnumerator BreakOpen()
     {
         isMoving = true;
 
-        Quaternion targetRotation = isOpen ? closedRotation : openRotation;
-        isOpen = !isOpen;
+        // Als aufgebrochen markieren
+        hasBeenBrokenOpen = true;
+
+        if (GameStateManager.Instance != null)
+        {
+            GameStateManager.Instance.SetItemCollected(
+                doorId + "_broken"
+            );
+        }
+
+        // Aufbruch-Sound
+        PlaySound(breakOpenSound, breakOpenVolume);
+
+        // Spind öffnen
+        Quaternion targetRotation = openRotation;
 
         while (Quaternion.Angle(transform.rotation, targetRotation) > 0.01f)
         {
@@ -139,31 +195,86 @@ public class DoorInteraction : MonoBehaviour, IInteractable
         }
 
         transform.rotation = targetRotation;
+
+        isOpen = true;
         isMoving = false;
         currentCoroutine = null;
     }
+
+    // =========================
+    // NORMAL OPEN / CLOSE
+    // =========================
+
+    private IEnumerator ToggleDoor()
+    {
+        isMoving = true;
+
+        bool opening = !isOpen;
+
+        Quaternion targetRotation = opening
+            ? openRotation
+            : closedRotation;
+
+        isOpen = opening;
+
+        // Sound
+        if (opening)
+        {
+            PlaySound(openSound, openVolume);
+        }
+        else
+        {
+            PlaySound(closeSound, closeVolume);
+        }
+
+        while (Quaternion.Angle(transform.rotation, targetRotation) > 0.01f)
+        {
+            transform.rotation = Quaternion.Lerp(
+                transform.rotation,
+                targetRotation,
+                Time.deltaTime * openSpeed
+            );
+
+            yield return null;
+        }
+
+        transform.rotation = targetRotation;
+
+        isMoving = false;
+        currentCoroutine = null;
+    }
+
+    // =========================
+    // SCENE TRANSITION
+    // =========================
 
     private IEnumerator OpenAndTransition()
     {
         isMoving = true;
         isOpen = true;
 
-        // Tür öffnen und gleichzeitig Fade-Timer starten
+        // Open-Sound
+        PlaySound(openSound, openVolume);
+
+        // Tür öffnen
         StartCoroutine(OpenDoor());
 
-        // Nur 0,3 Sekunden warten
         yield return new WaitForSeconds(transitionDelay);
 
-        // Fade starten
         SceneFader sceneFader = FindFirstObjectByType<SceneFader>();
 
         if (sceneFader != null)
         {
-            sceneFader.FadeAndLoad(sceneToLoad, fadeDuration);
+            sceneFader.FadeAndLoad(
+                sceneToLoad,
+                fadeDuration
+            );
         }
         else
         {
-            Debug.LogError("Kein SceneFader in der Szene gefunden!");
+            Debug.LogError(
+                "Kein SceneFader in der Szene gefunden!"
+            );
         }
     }
 
@@ -184,6 +295,22 @@ public class DoorInteraction : MonoBehaviour, IInteractable
 
         transform.rotation = targetRotation;
         isMoving = false;
+    }
+
+    // =========================
+    // SOUND
+    // =========================
+
+    private void PlaySound(AudioClip clip, float volume)
+    {
+        if (clip == null)
+            return;
+
+        AudioSource.PlayClipAtPoint(
+            clip,
+            transform.position,
+            volume
+        );
     }
 }
 

@@ -283,6 +283,13 @@ MonoBehaviour:
   openAngle: 1
   openSpeed: 3
   doorId: OperationVent
+  openSound: {fileID: 8300000, guid: ed89f6fa172ade042a5cb4867cfa06db, type: 3}
+  openVolume: 1
+  closeSound: {fileID: 0}
+  closeVolume: 1
+  breakOpenFirstTime: 1
+  breakOpenSound: {fileID: 8300000, guid: b8f96ce4959b6e84f92557bc542180b4, type: 3}
+  breakOpenVolume: 1
   promptText: open
   sceneToLoad: Generator
   fadeDuration: 1
@@ -3247,58 +3254,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
---- !u!1 &861425534
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 861425536}
-  - component: {fileID: 861425535}
-  m_Layer: 0
-  m_Name: IntroSequence
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 0
---- !u!114 &861425535
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 861425534}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2405e77d397e5a44697444064e9609a7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::IntroSequence
-  player: {fileID: 596906172}
-  dialogueLines:
-  - Good morning...
-  - Can you hear me?
-  - Take it slow.
-  typingSpeed: 0.05
-  displayDuration: 3
-  timeBetweenLines: 2
---- !u!4 &861425536
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 861425534}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -5.05399, y: 1.15614, z: 3.68408}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &861735619 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8861927386413722094, guid: 8585df512dabdea4c874ea5b03b21516, type: 3}
@@ -3872,7 +3827,7 @@ AudioSource:
   m_audioClip: {fileID: 0}
   m_Resource: {fileID: 8300000, guid: 259ef9f1d61080145a237d57637e0e07, type: 3}
   m_PlayOnAwake: 1
-  m_Volume: 0.5
+  m_Volume: 0.83
   m_Pitch: 1
   Loop: 1
   Mute: 0
@@ -4455,7 +4410,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::DoorInteraction
   openAngle: -90
   openSpeed: 3
-  doorId: 
+  doorId: locker_01
+  openSound: {fileID: 8300000, guid: a907fe334551b8a41aed7433d2438667, type: 3}
+  openVolume: 1
+  closeSound: {fileID: 8300000, guid: 3f6971432ca498940aff792f13db8c25, type: 3}
+  closeVolume: 1
+  breakOpenFirstTime: 1
+  breakOpenSound: {fileID: 8300000, guid: 9101063355c303547b18f755114669a0, type: 3}
+  breakOpenVolume: 1
   promptText: open
   sceneToLoad: 
   fadeDuration: 1
@@ -6196,7 +6158,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &1683516945
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6675,6 +6637,13 @@ MonoBehaviour:
   openAngle: 90
   openSpeed: 1
   doorId: OperationDoor
+  openSound: {fileID: 8300000, guid: 5aff2f7fc972df44ea1f73eeca6587b6, type: 3}
+  openVolume: 1
+  closeSound: {fileID: 8300000, guid: e9a5b1a06dae5384da5d8229aa18f31f, type: 3}
+  closeVolume: 1
+  breakOpenFirstTime: 0
+  breakOpenSound: {fileID: 0}
+  breakOpenVolume: 1
   promptText: open
   sceneToLoad: Hallway
   fadeDuration: 1
@@ -6887,6 +6856,9 @@ MonoBehaviour:
   requiredItemId: keycard
   promptText: '"swipe card"'
   lockedMessage: You need a keycard
+  swipeSound: {fileID: 8300000, guid: 7753c16dabd0a2c449704e0d52d5b297, type: 3}
+  swipeVolume: 0.48
+  swipeStateId: keycard_swiped
 --- !u!1001 &1906094924
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -9029,6 +9001,5 @@ SceneRoots:
   - {fileID: 57793359}
   - {fileID: 850747583}
   - {fileID: 1254238011}
-  - {fileID: 861425536}
   - {fileID: 1683516946}
   - {fileID: 1060028335}
