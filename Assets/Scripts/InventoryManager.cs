@@ -38,4 +38,13 @@ public class InventoryManager : MonoBehaviour
     {
         return collectedItems.Contains(itemId);
     }
+
+    public void RemoveItem(string itemId)
+    {
+        if (collectedItems.Contains(itemId))
+        {
+            collectedItems.Remove(itemId);
+            Debug.Log("Item removed: " + itemId);
+        }
+    }
 }

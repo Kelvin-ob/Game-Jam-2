@@ -7,6 +7,8 @@ public class GameStateManager : MonoBehaviour
 
     private HashSet<string> collectedItems = new HashSet<string>();
     private HashSet<string> unlockedDoors = new HashSet<string>();
+    private HashSet<string> filledGenerators = new HashSet<string>();
+    private HashSet<string> activatedGenerators = new HashSet<string>();
 
     public static GameStateManager EnsureInstance()
     {
@@ -56,4 +58,33 @@ public class GameStateManager : MonoBehaviour
     {
         return unlockedDoors.Contains(doorId);
     }
+
+    // =========================
+    // GENERATORS - FILLED
+    // =========================
+
+    public void SetGeneratorFilled(string generatorId)
+    {
+        filledGenerators.Add(generatorId);
+    }
+
+    public bool IsGeneratorFilled(string generatorId)
+    {
+        return filledGenerators.Contains(generatorId);
+    }
+
+    // =========================
+    // GENERATORS - ACTIVATED
+    // =========================
+
+    public void SetGeneratorActivated(string generatorId)
+    {
+        activatedGenerators.Add(generatorId);
+    }
+
+    public bool IsGeneratorActivated(string generatorId)
+    {
+        return activatedGenerators.Contains(generatorId);
+    }
 }
+
