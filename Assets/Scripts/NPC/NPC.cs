@@ -1,6 +1,5 @@
 using UnityEngine;
 using UnityEngine.AI;
-using UnityEngine.SceneManagement;
 
 public class EnemyAI : MonoBehaviour
 {
@@ -16,31 +15,32 @@ public class EnemyAI : MonoBehaviour
     [Header("References")]
     [SerializeField] private NavMeshAgent agent;
     [SerializeField] private Transform player;
+    [SerializeField] private Animator animator;
 
     [Header("Jumpscare")]
     [SerializeField] private Transform jumpscarePosition;
     [SerializeField] private float jumpscareDuration = 1.5f;
+    [SerializeField] private float jumpscareMoveSpeed = 18f;
 
     [Header("Player")]
     [SerializeField] private Transform respawnPoint;
-    [SerializeField] private MonoBehaviour playerMovement;
 
     [Header("Chase")]
     [SerializeField] private float chaseSpeed = 5f;
-    [SerializeField] private float catchDistance = 1.2f;
+    [SerializeField] private float catchDistance = 1.5f;
 
     [Header("Health")]
     [SerializeField] private int health = 1;
 
-    [Header("Death")]
+    [Header("Death / Ragdoll")]
     [SerializeField] private Rigidbody[] ragdollRigidbodies;
     [SerializeField] private Collider[] ragdollColliders;
-    [SerializeField] private Animator animator;
     [SerializeField] private Collider mainCollider;
 
     private EnemyState currentState = EnemyState.Idle;
 
     private bool sequenceStarted = false;
+
 
     private void Awake()
     {
@@ -48,32 +48,56 @@ public class EnemyAI : MonoBehaviour
             agent = GetComponent<NavMeshAgent>();
 
         if (player == null)
-            player = GameObject.Find("PlayerObj").transform;
+        {
+            GameObject playerObject = GameObject.Find("PlayerObj");
+
+            if (playerObject != null)
+                player = playerObject.transform;
+        }
+
+        // Ragdoll deaktivieren
+        foreach (Rigidbody rb in ragdollRigidbodies)
+        {
+            rb.isKinematic = true;
+        }
+
+        foreach (Collider col in ragdollColliders)
+        {
+            col.enabled = false;
+        }
+
+        // Startzustand
+        SetRunning(false);
     }
+
 
     private void Update()
     {
         switch (currentState)
         {
             case EnemyState.Idle:
-                break;
-
             case EnemyState.Jumpscare:
-                break;
-
             case EnemyState.Talking:
+            case EnemyState.Dead:
+                SetRunning(false);
                 break;
 
             case EnemyState.Chasing:
+                SetRunning(true);
                 ChasePlayer();
-                break;
 
-            case EnemyState.Dead:
+                if (IsPlayerCaughtByDistance())
+                    PlayerCaught();
+
                 break;
         }
     }
 
-    // Wird vom Trigger aufgerufen
+
+    // =========================================================
+    // SEQUENCE
+    // =========================================================
+
     public void StartSequence()
     {
         if (sequenceStarted)
@@ -84,20 +108,39 @@ public class EnemyAI : MonoBehaviour
         StartCoroutine(JumpscareSequence());
     }
 
+
     private System.Collections.IEnumerator JumpscareSequence()
     {
         currentState = EnemyState.Jumpscare;
+        SetRunning(false);
 
-        agent.isStopped = true;
-
-        // Enemy an Jumpscare-Position setzen
-        if (jumpscarePosition != null)
+        if (agent != null)
         {
-            transform.position = jumpscarePosition.position;
-            transform.rotation = jumpscarePosition.rotation;
+            agent.isStopped = true;
+            agent.ResetPath();
         }
 
-        // Hier später Jumpscare-Animation/Sound
+        if (jumpscarePosition != null)
+        {
+            Vector3 startPosition = transform.position;
+            float elapsedTime = 0f;
+            float moveDuration = 0.2f;
+
+            while (elapsedTime < moveDuration)
+            {
+                float t = elapsedTime / moveDuration;
+                transform.position = Vector3.Lerp(startPosition, jumpscarePosition.position, t);
+                elapsedTime += Time.deltaTime;
+                yield return null;
+            }
+
+            transform.position = jumpscarePosition.position;
+            transform.rotation = jumpscarePosition.rotation;
+
+            if (agent != null)
+                agent.Warp(jumpscarePosition.position);
+        }
+
         Debug.Log("JUMPSCARE!");
 
         yield return new WaitForSeconds(jumpscareDuration);
@@ -105,80 +148,84 @@ public class EnemyAI : MonoBehaviour
         StartTalking();
     }
 
+
+    // =========================================================
+    // TALKING
+    // =========================================================
+
     private void StartTalking()
     {
         currentState = EnemyState.Talking;
 
+        SetRunning(false);
+
+        agent.isStopped = true;
+
         Debug.Log("Enemy beginnt zu reden.");
 
-        // HIER dein Voice/Dialogue-System starten.
-        //
-        // Wenn dein Dialogue fertig ist:
-        // StartChase();
-
-        // Zum Testen:
+        // TEMPORÄR:
+        // Später hier dein Voice-/Dialogue-System aufrufen.
         Invoke(nameof(StartChase), 3f);
     }
 
+
+    // =========================================================
+    // CHASE
+    // =========================================================
+
     public void StartChase()
     {
-        if (jumpscarePosition != null)
-        {
-            transform.position = jumpscarePosition.position;
-            transform.rotation = jumpscarePosition.rotation;
-        }
         if (currentState == EnemyState.Dead)
             return;
+
+        CancelInvoke(nameof(StartChase));
 
         currentState = EnemyState.Chasing;
 
         agent.isStopped = false;
         agent.speed = chaseSpeed;
 
+        SetRunning(true);
+
         Debug.Log("CHASE START!");
     }
+
 
     private void ChasePlayer()
     {
         if (player == null)
             return;
 
+        if (!agent.enabled)
+            return;
+
         agent.SetDestination(player.position);
-
-        if (Vector3.Distance(transform.position, player.position) <= catchDistance)
-        {
-            PlayerCaught();
-        }
     }
 
-    // Wird aufgerufen, wenn Enemy den Spieler berührt
-    private void OnCollisionEnter(Collision collision)
+
+    // =========================================================
+    // PLAYER CAUGHT
+    // =========================================================
+
+    private bool IsPlayerCaughtByDistance()
     {
-        TryCatchPlayer(collision.transform);
+        if (player == null)
+            return false;
+
+        float distance = Vector3.Distance(transform.position, player.position);
+        return distance <= catchDistance;
     }
 
-    private void OnTriggerEnter(Collider other)
-    {
-        TryCatchPlayer(other.transform);
-    }
-
-    private void TryCatchPlayer(Transform other)
+    public void PlayerCaught()
     {
         if (currentState != EnemyState.Chasing)
             return;
 
-        if (other.CompareTag("Player") || other.root.CompareTag("Player"))
-        {
-            PlayerCaught();
-        }
-    }
-
-    private void PlayerCaught()
-    {
         Debug.Log("Spieler wurde erwischt!");
 
         RespawnPlayer();
     }
+
 
     private void RespawnPlayer()
     {
@@ -197,11 +244,33 @@ public class EnemyAI : MonoBehaviour
         if (controller != null)
             controller.enabled = true;
 
-        // Chase wieder starten
-        StartChase();
+        Debug.Log("Spieler respawnt!");
+
+        ResetNpcToJumpscarePosition();
     }
 
-    // Wird von der Waffe aufgerufen
+    private void ResetNpcToJumpscarePosition()
+    {
+        if (agent != null)
+        {
+            agent.isStopped = true;
+            agent.ResetPath();
+        }
+
+        currentState = EnemyState.Jumpscare;
+        SetRunning(false);
+        sequenceStarted = false;
+
+        Debug.Log("NPC zurück zur Jumpscare-Position!");
+
+        StartSequence();
+    }
+
+
+    // =========================================================
+    // DAMAGE
+    // =========================================================
+
     public void TakeDamage(int damage)
     {
         if (currentState == EnemyState.Dead)
@@ -209,20 +278,35 @@ public class EnemyAI : MonoBehaviour
 
         health -= damage;
 
+        Debug.Log("Enemy Damage: " + damage);
+
         if (health <= 0)
         {
             Die();
         }
     }
 
+
+    // =========================================================
+    // DEATH
+    // =========================================================
+
     private void Die()
     {
+        if (currentState == EnemyState.Dead)
+            return;
+
         currentState = EnemyState.Dead;
 
-        Debug.Log("Enemy tot!");
+        SetRunning(false);
 
-        agent.isStopped = true;
-        agent.enabled = false;
+        CancelInvoke();
+
+        if (agent != null)
+        {
+            agent.isStopped = true;
+            agent.enabled = false;
+        }
 
         if (mainCollider != null)
             mainCollider.enabled = false;
@@ -231,7 +315,10 @@ public class EnemyAI : MonoBehaviour
             animator.enabled = false;
 
         EnableRagdoll();
+
+        Debug.Log("Enemy ist tot!");
     }
+
 
     private void EnableRagdoll()
     {
@@ -243,6 +330,39 @@ public class EnemyAI : MonoBehaviour
         foreach (Collider col in ragdollColliders)
         {
             col.enabled = true;
+        }
+    }
+
+
+    // =========================================================
+    // ANIMATION
+    // =========================================================
+
+    private void SetRunning(bool running)
+    {
+        if (animator == null)
+            return;
+
+        animator.SetBool("IsRunning", running);
+    }
+
+
+    // =========================================================
+    // DEBUG
+    // =========================================================
+
+    private void OnDrawGizmosSelected()
+    {
+        if (jumpscarePosition != null)
+        {
+            Gizmos.color = Color.red;
+            Gizmos.DrawWireSphere(jumpscarePosition.position, 0.3f);
+        }
+
+        if (respawnPoint != null)
+        {
+            Gizmos.color = Color.green;
+            Gizmos.DrawWireSphere(respawnPoint.position, 0.3f);
         }
     }
 }
