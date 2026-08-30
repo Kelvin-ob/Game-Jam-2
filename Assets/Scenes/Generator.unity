@@ -1340,7 +1340,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PickupItem
   itemId: gasoline
+  gunToEnable: {fileID: 0}
   promptText: pick up
+  keycardVoiceTrigger: {fileID: 0}
   pickupSound: {fileID: 8300000, guid: 154f842c11ac6b749bead037e4e8a245, type: 3}
   pickupVolume: 1
 --- !u!4 &1107177352
@@ -2386,21 +2388,26 @@ MonoBehaviour:
   openAngle: 1
   openSpeed: 3
   doorId: 
-  openSound: {fileID: 0}
-  openVolume: 1
+  openSound: {fileID: 8300000, guid: ed89f6fa172ade042a5cb4867cfa06db, type: 3}
+  openVolume: 0.669
   closeSound: {fileID: 0}
   closeVolume: 1
   breakOpenFirstTime: 0
   breakOpenSound: {fileID: 0}
   breakOpenVolume: 1
   promptText: go back
-  sceneToLoad: OperationRoom
+  sceneToLoad: OperationRoom_Electricity
   fadeDuration: 1
   transitionDelay: 0.3
   requiresUnlock: 0
   lockedMessage: You need to swipe your card first
   requiredItemId: 
-  missingItemMessage: You need a crowbar
+  missingItemMessage: Start the Generator
+  requiresGeneratorActive: 0
+  requiredGeneratorId: generator_01
+  generatorRequiredMessage: The generator has to be running
+  additionalRequiredItemId: 
+  missingAdditionalItemMessage: You need another item
 --- !u!1 &1630984258
 GameObject:
   m_ObjectHideFlags: 0

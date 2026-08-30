@@ -1,3 +1,4 @@
+using Unity.Cinemachine;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -24,6 +25,9 @@ public class NPC : MonoBehaviour
     [SerializeField] private Transform jumpscarePosition;
     [SerializeField] private float jumpscareDuration = 1.5f;
     [SerializeField] private float jumpscareMoveSpeed = 18f;
+
+    [SerializeField] private CinemachineImpulseSource impulseSource;
+    [SerializeField] private Vector3 hitImpulseForce = new Vector3(1f, 1f, 0f);
 
     [Header("Player")]
     [SerializeField] private Transform respawnPoint;
@@ -135,7 +139,10 @@ public class NPC : MonoBehaviour
             if (agent != null)
                 agent.Warp(jumpscarePosition.position);
         }
-
+        if (impulseSource != null)
+            {
+                impulseSource.GenerateImpulse(hitImpulseForce);
+            }
         Debug.Log("JUMPSCARE!");
 
         yield return new WaitForSeconds(jumpscareDuration);
