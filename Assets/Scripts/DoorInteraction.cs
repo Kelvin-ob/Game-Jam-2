@@ -38,6 +38,15 @@ public class DoorInteraction : MonoBehaviour, IInteractable
     [SerializeField] private string requiredItemId = "";
     [SerializeField] private string missingItemMessage = "You need a crowbar";
 
+    [Header("Generator Requirement (optional)")]
+    [SerializeField] private bool requiresGeneratorActive = false;
+    [SerializeField] private string requiredGeneratorId = "generator_01";
+    [SerializeField] private string generatorRequiredMessage = "The generator has to be running";
+
+    [Header("Additional Item Requirement (optional)")]
+    [SerializeField] private string additionalRequiredItemId = "";
+    [SerializeField] private string missingAdditionalItemMessage = "You need another item";
+
     private bool isUnlocked = false;
     private bool isOpen = false;
     private bool isMoving = false;
@@ -79,11 +88,29 @@ public class DoorInteraction : MonoBehaviour, IInteractable
             return;
         }
 
+        // Generator-Sperre
+        if (requiresGeneratorActive &&
+            (GameStateManager.Instance == null ||
+             !GameStateManager.Instance.IsGeneratorActivated(requiredGeneratorId)))
+        {
+            StartCoroutine(ShowMessage(generatorRequiredMessage));
+            return;
+        }
+
         // Item-Sperre
         if (!string.IsNullOrEmpty(requiredItemId) &&
-            !InventoryManager.Instance.HasItem(requiredItemId))
+            (InventoryManager.Instance == null ||
+             !InventoryManager.Instance.HasItem(requiredItemId)))
         {
             StartCoroutine(ShowMessage(missingItemMessage));
+            return;
+        }
+
+        if (!string.IsNullOrEmpty(additionalRequiredItemId) &&
+            (InventoryManager.Instance == null ||
+             !InventoryManager.Instance.HasItem(additionalRequiredItemId)))
+        {
+            StartCoroutine(ShowMessage(missingAdditionalItemMessage));
             return;
         }
 
@@ -106,7 +133,7 @@ public class DoorInteraction : MonoBehaviour, IInteractable
         }
 
         // =========================
-        // NORMALE TÜR
+        // NORMALE Tï¿½R
         // =========================
 
         if (!isOpen && !string.IsNullOrEmpty(sceneToLoad))
@@ -180,7 +207,7 @@ public class DoorInteraction : MonoBehaviour, IInteractable
         // Aufbruch-Sound
         PlaySound(breakOpenSound, breakOpenVolume);
 
-        // Spind öffnen
+        // Spind ï¿½ffnen
         Quaternion targetRotation = openRotation;
 
         while (Quaternion.Angle(transform.rotation, targetRotation) > 0.01f)
@@ -256,7 +283,7 @@ public class DoorInteraction : MonoBehaviour, IInteractable
         // Open-Sound
         PlaySound(openSound, openVolume);
 
-        // Tür öffnen
+        // Tï¿½r ï¿½ffnen
         StartCoroutine(OpenDoor());
 
         yield return new WaitForSeconds(transitionDelay);

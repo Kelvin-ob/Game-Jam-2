@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!114 &-801594251098694584
+--- !u!114 &-2976084738409641973
 MonoBehaviour:
   m_ObjectHideFlags: 11
   m_CorrespondingSourceObject: {fileID: 0}
@@ -20,7 +20,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: PSX_Crowbar
+  m_Name: PSX_Gas
   m_Shader: {fileID: 4800000, guid: 2f501f658af051641aeb05fa1bbef469, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
@@ -92,7 +92,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MainTex:
-        m_Texture: {fileID: 2800000, guid: f8ccc52a735a57042abdcbf42d8c960d, type: 3}
+        m_Texture: {fileID: 2800000, guid: 8280ee9c5a20e3c47bd7232a11d3b43b, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MetallicGlossMap:
@@ -200,7 +200,7 @@ Material:
     - _BaseColor: {r: 1, g: 1, b: 1, a: 1}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _ColorTint: {r: 1, g: 1, b: 1, a: 1}
-    - _CustomAmbientColor: {r: 1, g: 1, b: 1, a: 1}
+    - _CustomAmbientColor: {r: 0.39622638, g: 0.39622638, b: 0.39622638, a: 1}
     - _CustomLightDirection: {r: 0, g: 0, b: 0, a: 0}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _LOD1: {r: 2048, g: 0, b: 1024, a: 10}
@@ -210,8 +210,8 @@ Material:
     - _LOD5: {r: 32, g: 94, b: 64, a: 40}
     - _LOD6: {r: 16, g: 59, b: 32, a: 45}
     - _LOD7: {r: 8, g: 17, b: 16, a: 50}
-    - _RimColor: {r: 1, g: 0.99777603, b: 0, a: 1}
+    - _RimColor: {r: 0.254717, g: 0.254717, b: 0.254717, a: 1}
     - _SpecColor: {r: 0.19999996, g: 0.19999996, b: 0.19999996, a: 1}
-    - _SpecularColor: {r: 1, g: 1, b: 1, a: 1}
+    - _SpecularColor: {r: 0.2358491, g: 0.2358491, b: 0.2358491, a: 1}
   m_BuildTextureStacks: []
   m_AllowLocking: 1

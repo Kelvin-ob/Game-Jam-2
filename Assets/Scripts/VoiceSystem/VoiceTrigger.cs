@@ -1,4 +1,4 @@
-ï»¿using UnityEngine;
+using UnityEngine;
 
 public class VoiceTrigger : MonoBehaviour
 {
@@ -44,15 +44,15 @@ public class VoiceTrigger : MonoBehaviour
 
     public void TriggerVoice()
     {
-        // Bereits ausgelï¿½st
+        // Bereits ausgelöst
         if (triggerOnce && triggered)
             return;
 
-        // Voraussetzungen prï¿½fen
+        // Voraussetzungen prüfen
         if (!AllRequirementsMet())
             return;
 
-        // Als ausgelï¿½st markieren
+        // Als ausgelöst markieren
         triggered = true;
 
         // Status dauerhaft speichern
@@ -78,12 +78,12 @@ public class VoiceTrigger : MonoBehaviour
                 if (requiredTrigger == null)
                     continue;
 
-                // Erst prï¿½fen, ob der Trigger aktuell ausgelï¿½st wurde
+                // Erst prüfen, ob der Trigger aktuell ausgelöst wurde
                 if (requiredTrigger.triggered)
                     continue;
 
                 // Falls der Trigger aus einer anderen Szene kommt:
-                // gespeicherten Status prï¿½fen
+                // gespeicherten Status prüfen
                 if (GameStateManager.Instance != null &&
                     GameStateManager.Instance.IsVoiceTriggerTriggered(
                         requiredTrigger.GetTriggerId()))
@@ -91,7 +91,7 @@ public class VoiceTrigger : MonoBehaviour
                     continue;
                 }
 
-                // Voraussetzung noch nicht erfï¿½llt
+                // Voraussetzung noch nicht erfüllt
                 return false;
             }
         }
@@ -118,7 +118,7 @@ public class VoiceTrigger : MonoBehaviour
         return true;
     }
 
-    // Trigger-ID fï¿½r andere VoiceTrigger verfï¿½gbar machen
+    // Trigger-ID für andere VoiceTrigger verfügbar machen
     public string GetTriggerId()
     {
         return triggerId;
@@ -155,7 +155,7 @@ public class VoiceTrigger : MonoBehaviour
                 () => !VoiceManager.Instance.IsVoiceActive
             );
 
-            // Pause zwischen den Sï¿½tzen
+            // Pause zwischen den Sätzen
             yield return new WaitForSeconds(timeBetweenLines);
         }
 
@@ -177,3 +177,4 @@ public class VoiceTrigger : MonoBehaviour
     {
     }
 }
+
