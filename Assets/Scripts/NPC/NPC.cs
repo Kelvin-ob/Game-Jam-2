@@ -185,16 +185,34 @@ public class NPC : MonoBehaviour
     private void StartTalking()
     {
         currentState = EnemyState.Talking;
-
         SetRunning(false);
-
         agent.isStopped = true;
 
         Debug.Log("Enemy beginnt zu reden.");
 
-        // TEMPORÄR:
-        // Später hier dein Voice-/Dialogue-System aufrufen.
-        Invoke(nameof(StartChase), 3f);
+        StartCoroutine(TalkingSequence()); // GEÄNDERT: statt Invoke
+    }
+
+    private System.Collections.IEnumerator TalkingSequence()
+    {
+        foreach (DialogueLine line in talkingDialogue)
+        {
+            if (string.IsNullOrWhiteSpace(line.text))
+                continue;
+
+            if (line.isAI)
+            {
+                VoiceManager.Instance.ShowVoice(line.text);
+                yield return new WaitUntil(() => !VoiceManager.Instance.IsVoiceActive);
+            }
+            else
+            {
+                npcVoiceManager.ShowDialogue(new string[] { line.text });
+                yield return new WaitUntil(() => !npcVoiceManager.IsVoiceActive);
+            }
+        }
+
+        StartChase();
     }
 
 
