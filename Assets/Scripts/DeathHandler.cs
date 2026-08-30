@@ -1,4 +1,5 @@
 using System.Collections;
+using Unity.Cinemachine;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -7,12 +8,19 @@ public class DeathHandler : MonoBehaviour
     [SerializeField] private Animator animator;
     [SerializeField] private string sceneToLoad = "";
     [SerializeField] private float waitBeforeLoad = 2f;
+    [SerializeField] private CinemachineImpulseSource impulseSource;
+    [SerializeField] private Vector3 hitImpulseForce = new Vector3(1f, 1f, 0f);
 
     private void Start()
     {
         if (animator != null)
             animator.SetBool("IsJumpScare", true);
+        
 
+        if (impulseSource != null)
+            {
+                impulseSource.GenerateImpulse(hitImpulseForce);
+            }
         StartCoroutine(LoadAfterDelay());
     }
 
