@@ -12,6 +12,11 @@ public class NPCVoiceManager : MonoBehaviour
     [SerializeField] private float displayDuration = 3f;
     [SerializeField] private float timeBetweenLines = 0.5f;
 
+    [Header("Typewriter Sound")] // NEU
+    [SerializeField] private AudioSource typewriterAudio;
+    [SerializeField] private AudioClip typewriterSound;
+    [SerializeField][Range(0f, 1f)] private float typewriterVolume = 0.5f;
+
     public bool IsVoiceActive { get; private set; }
 
     public void ShowDialogue(string[] lines)
@@ -43,6 +48,12 @@ public class NPCVoiceManager : MonoBehaviour
             for (int i = 0; i < line.Length; i++)
             {
                 npcText.text += line[i];
+
+                if (!char.IsWhiteSpace(line[i])) // NEU
+                {
+                    PlayTypewriterSound(); // NEU
+                }
+
                 yield return new WaitForSeconds(typingSpeed);
             }
 
@@ -56,5 +67,14 @@ public class NPCVoiceManager : MonoBehaviour
             npcText.gameObject.SetActive(false);
 
         IsVoiceActive = false;
+    }
+
+    // NEU
+    private void PlayTypewriterSound()
+    {
+        if (typewriterAudio == null || typewriterSound == null)
+            return;
+
+        typewriterAudio.PlayOneShot(typewriterSound, typewriterVolume);
     }
 }

@@ -252,6 +252,38 @@ MonoBehaviour:
     m_VarianceClampScale: 0.9
     m_ContrastAdaptiveSharpening: 0
   m_Version: 2
+--- !u!1 &117270415
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 117270416}
+  m_Layer: 0
+  m_Name: TRIGGERVOICES
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &117270416
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 117270415}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0.12492, y: 0.29542, z: 5.21375}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 1127058263}
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &123803011
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -875,15 +907,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 9807fe46135572247a8eb5894ab4072e, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -0.861
+      value: -5.38
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 9807fe46135572247a8eb5894ab4072e, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.677
+      value: -0.68
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 9807fe46135572247a8eb5894ab4072e, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 1.12
+      value: 0.65
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 9807fe46135572247a8eb5894ab4072e, type: 3}
       propertyPath: m_LocalRotation.w
@@ -1175,6 +1207,86 @@ Transform:
   - {fileID: 1334637875}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1127058262
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1127058263}
+  - component: {fileID: 1127058265}
+  - component: {fileID: 1127058264}
+  m_Layer: 0
+  m_Name: EnteringGenRoomTrigger
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1127058263
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1127058262}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 117270416}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &1127058264
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1127058262}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 2.192871, y: 1, z: 2.1223354}
+  m_Center: {x: 0.3369739, y: 0, z: -0.5611677}
+--- !u!114 &1127058265
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1127058262}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6c4eb470a1beac740a27535f9ccffb79, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::VoiceTrigger
+  triggerId: voice_trigger_when_spawning_in_genroom
+  triggerOnce: 1
+  dialogueLines:
+  - Good.
+  - The generator looks out of shape.
+  - It is probably empty.
+  - On your left is a gas can. Take it and fill up the Generator.
+  typingSpeed: 0.05
+  displayDuration: 1.5
+  timeBetweenLines: 0.5
+  requiredTriggers: []
+  requiredItems: []
+  player: {fileID: 1993299722}
+  lockMovement: 1
 --- !u!1001 &1145666181
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2525,6 +2637,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: CanvasFader
       objectReference: {fileID: 0}
+    - target: {fileID: 3677906847789496094, guid: d79c856ee7034574eb2a7a6291727321, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8243572355632810741, guid: d79c856ee7034574eb2a7a6291727321, type: 3}
       propertyPath: m_Pivot.x
       value: 0
@@ -3594,17 +3710,18 @@ SceneRoots:
   - {fileID: 73775579}
   - {fileID: 2144405264}
   - {fileID: 1951533286}
+  - {fileID: 1747155322}
   - {fileID: 1630984259}
+  - {fileID: 1993299724}
+  - {fileID: 910291576}
   - {fileID: 604935283}
+  - {fileID: 955480264}
   - {fileID: 1057648361}
   - {fileID: 2135656551}
   - {fileID: 1525596582}
   - {fileID: 1947156276}
   - {fileID: 171808329}
-  - {fileID: 910291576}
-  - {fileID: 1993299724}
-  - {fileID: 1747155322}
   - {fileID: 1570209224}
   - {fileID: 1107177352}
   - {fileID: 123803011}
-  - {fileID: 955480264}
+  - {fileID: 117270416}
