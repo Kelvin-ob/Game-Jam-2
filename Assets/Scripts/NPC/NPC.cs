@@ -19,6 +19,18 @@ public class NPC : MonoBehaviour
     [SerializeField] private Animator animator;
     public bool openDoor;
 
+    [System.Serializable]
+    public class DialogueLine
+    {
+        public bool isAI; // true = VoiceManager (AI im Kopf), false = NPCVoiceManager (echte Person)
+        [TextArea(2, 4)]
+        public string text;
+    }
+
+    [Header("Talking")]
+    [SerializeField] private NPCVoiceManager npcVoiceManager; // NEU: Referenz
+    [SerializeField] private DialogueLine[] talkingDialogue; // NEU: abwechselnde Zeilen
+
 
 
     [Header("Jumpscare")]
@@ -28,6 +40,15 @@ public class NPC : MonoBehaviour
 
     [SerializeField] private CinemachineImpulseSource impulseSource;
     [SerializeField] private Vector3 hitImpulseForce = new Vector3(1f, 1f, 0f);
+
+    [Header("Jumpscare Sound")]
+    [SerializeField] private AudioSource audioSource;
+    [SerializeField] private AudioClip jumpscareSound;
+    [SerializeField][Range(0f, 1f)] private float jumpscareVolume = 1f;
+
+    [Header("Chase Scene")]
+    [SerializeField] private AudioSource musicAudioSource;
+    [SerializeField] private AudioClip chaseSound; // Chase Scene Track
 
     [Header("Player")]
     [SerializeField] private Transform respawnPoint;
@@ -140,9 +161,15 @@ public class NPC : MonoBehaviour
                 agent.Warp(jumpscarePosition.position);
         }
         if (impulseSource != null)
-            {
+        {
                 impulseSource.GenerateImpulse(hitImpulseForce);
-            }
+        }
+
+        if (audioSource != null && jumpscareSound != null)
+        {
+            audioSource.PlayOneShot(jumpscareSound, jumpscareVolume);
+        }
+
         Debug.Log("JUMPSCARE!");
 
         yield return new WaitForSeconds(jumpscareDuration);
@@ -194,7 +221,16 @@ public class NPC : MonoBehaviour
         SetRunning(true);
         openDoor = true;
 
+        if (audioSource != null && chaseSound != null)
+        {
+            musicAudioSource.clip = chaseSound;
+            musicAudioSource.loop = true;
+            musicAudioSource.Play();
+        }
         Debug.Log("CHASE START!");
+
+
+        
     }
 
 
