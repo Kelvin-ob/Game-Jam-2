@@ -121,22 +121,22 @@ public class DoorInteraction : MonoBehaviour, IInteractable
         if (currentCoroutine != null)
             StopCoroutine(currentCoroutine);
 
-        // =========================
         // ERSTES AUFBRECHEN
-        // =========================
-
-        if (breakOpenFirstTime && !hasBeenBrokenOpen && !isOpen)
+        if (breakOpenFirstTime && !hasBeenBrokenOpen)
         {
             currentCoroutine = StartCoroutine(BreakOpen());
-
-            promptText = "close";
+            promptText = string.IsNullOrEmpty(sceneToLoad) ? "close" : "enter"; // GEÄNDERT
             return;
         }
 
-        // =========================
-        // NORMALE T�R
-        // =========================
+        // NEU: Nach dem Aufbrechen, falls Szenenwechsel vorgesehen ist, direkt reingehen statt togglen
+        if (hasBeenBrokenOpen && !string.IsNullOrEmpty(sceneToLoad))
+        {
+            currentCoroutine = StartCoroutine(OpenAndTransition());
+            return;
+        }
 
+        // NORMALE TÜR (unverändert)
         if (!isOpen && !string.IsNullOrEmpty(sceneToLoad))
         {
             currentCoroutine = StartCoroutine(OpenAndTransition());
@@ -148,6 +148,7 @@ public class DoorInteraction : MonoBehaviour, IInteractable
 
         promptText = isOpen ? "close" : "open";
     }
+
 
     public void Unlock()
     {
