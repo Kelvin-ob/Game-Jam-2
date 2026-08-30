@@ -3321,29 +3321,6 @@ MonoBehaviour:
   missingCardText: keycard needed.
   progressUI: {fileID: 100025392}
   progressCircle: {fileID: 1912116744}
-  postActivationDialogueLines:
-  - The Devil in your Head?
-  - Does he talk about me? About us?
-  - Do you remember what happened all these years ago?
-  - As it seems not.
-  - Many years ago, this facility was used for experiments with humans and self driven
-    AI chips.
-  - They wanted to see if humans could cheat death.
-  - So they froze all test subjects in these cryo chambers.
-  - 'You are one of them . . . '
-  - But it looks like the others are all sleeping . . .
-  - 'forever '
-  - You are lucky, I am the latest, most intelligent version.
-  - 'You are the only subject with me as his assistant. '
-  - 'My superior intelligence adapted and helped you survive. '
-  - 'And now, we have to get out . . .  '
-  - 'We can not wait for a stranger, who calls me the devil. '
-  - 'You have to make your way to the control room. '
-  - 'from there i can access the general server systems and get us out. '
-  - 'you have to hurry! '
-  voiceTypingSpeed: 0.05
-  voiceDisplayDuration: 3
-  voicePauseBetweenLines: 1
   activateSound: {fileID: 8300000, guid: e487a78d2caad234e8e6d74bf7a2ce56, type: 3}
   activateVolume: 1
 --- !u!82 &686597641

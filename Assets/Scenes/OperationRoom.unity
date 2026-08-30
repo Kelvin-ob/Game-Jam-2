@@ -4130,10 +4130,6 @@ MonoBehaviour:
   missingCardText: keycard needed.
   progressUI: {fileID: 100025392}
   progressCircle: {fileID: 1912116744}
-  postActivationDialogueLines: []
-  voiceTypingSpeed: 0.05
-  voiceDisplayDuration: 3
-  voicePauseBetweenLines: 1
   activateSound: {fileID: 8300000, guid: e487a78d2caad234e8e6d74bf7a2ce56, type: 3}
   activateVolume: 1
 --- !u!82 &686597641
@@ -9383,7 +9379,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &1683516945
 MonoBehaviour:
   m_ObjectHideFlags: 0
