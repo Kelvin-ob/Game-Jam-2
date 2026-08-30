@@ -9,6 +9,9 @@ public class GameStateManager : MonoBehaviour
     private HashSet<string> unlockedDoors = new HashSet<string>();
     private HashSet<string> filledGenerators = new HashSet<string>();
     private HashSet<string> activatedGenerators = new HashSet<string>();
+    private HashSet<string> triggeredVoiceTriggers = new HashSet<string>();
+
+    private bool keycardActivated = false;
 
     private void Awake()
     {
@@ -76,5 +79,29 @@ public class GameStateManager : MonoBehaviour
     public bool IsGeneratorActivated(string generatorId)
     {
         return activatedGenerators.Contains(generatorId);
+    }
+
+    // =========================
+    // KEYCARD
+    // =========================
+
+    public void SetKeycardActivated()
+    {
+        keycardActivated = true;
+    }
+
+    public bool IsKeycardActivated()
+    {
+        return keycardActivated;
+    }
+
+    public void SetVoiceTriggerTriggered(string triggerId)
+    {
+        triggeredVoiceTriggers.Add(triggerId);
+    }
+
+    public bool IsVoiceTriggerTriggered(string triggerId)
+    {
+        return triggeredVoiceTriggers.Contains(triggerId);
     }
 }

@@ -1,8 +1,9 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 
 public class VoiceTrigger : MonoBehaviour
 {
     [Header("Trigger")]
+    [SerializeField] private string triggerId = "voice_trigger_01";
     [SerializeField] private bool triggerOnce = true;
 
     [Header("Dialogue")]
@@ -15,7 +16,6 @@ public class VoiceTrigger : MonoBehaviour
 
     [Header("Requirements")]
     [SerializeField] private VoiceTrigger[] requiredTriggers;
-
     [SerializeField] private string[] requiredItems;
 
     [Header("Movement")]
@@ -24,25 +24,53 @@ public class VoiceTrigger : MonoBehaviour
 
     private bool triggered;
 
+    private void Start()
+    {
+        if (triggerOnce &&
+            GameStateManager.Instance != null &&
+            GameStateManager.Instance.IsVoiceTriggerTriggered(triggerId))
+        {
+            triggered = true;
+        }
+    }
+
     private void OnTriggerEnter(Collider other)
     {
         if (!other.CompareTag("Player"))
             return;
 
+        TriggerVoice();
+    }
+
+    public void TriggerVoice()
+    {
+        // Bereits ausgelï¿½st
         if (triggerOnce && triggered)
             return;
 
+        // Voraussetzungen prï¿½fen
         if (!AllRequirementsMet())
             return;
 
+        // Als ausgelï¿½st markieren
         triggered = true;
+
+        // Status dauerhaft speichern
+        if (triggerOnce &&
+            GameStateManager.Instance != null)
+        {
+            GameStateManager.Instance.SetVoiceTriggerTriggered(triggerId);
+        }
 
         StartCoroutine(PlayDialogue());
     }
 
     private bool AllRequirementsMet()
     {
-        // Required Voice Triggers prüfen
+        // ==========================================
+        // REQUIRED VOICE TRIGGERS
+        // ==========================================
+
         if (requiredTriggers != null)
         {
             foreach (VoiceTrigger requiredTrigger in requiredTriggers)
@@ -50,12 +78,28 @@ public class VoiceTrigger : MonoBehaviour
                 if (requiredTrigger == null)
                     continue;
 
-                if (!requiredTrigger.triggered)
-                    return false;
+                // Erst prï¿½fen, ob der Trigger aktuell ausgelï¿½st wurde
+                if (requiredTrigger.triggered)
+                    continue;
+
+                // Falls der Trigger aus einer anderen Szene kommt:
+                // gespeicherten Status prï¿½fen
+                if (GameStateManager.Instance != null &&
+                    GameStateManager.Instance.IsVoiceTriggerTriggered(
+                        requiredTrigger.GetTriggerId()))
+                {
+                    continue;
+                }
+
+                // Voraussetzung noch nicht erfï¿½llt
+                return false;
             }
         }
 
-        // Required Items prüfen
+        // ==========================================
+        // REQUIRED ITEMS
+        // ==========================================
+
         if (requiredItems != null)
         {
             foreach (string itemId in requiredItems)
@@ -63,23 +107,38 @@ public class VoiceTrigger : MonoBehaviour
                 if (string.IsNullOrWhiteSpace(itemId))
                     continue;
 
-                if (!GameStateManager.Instance.IsItemCollected(itemId))
+                if (GameStateManager.Instance == null ||
+                    !GameStateManager.Instance.IsItemCollected(itemId))
+                {
                     return false;
+                }
             }
         }
 
         return true;
     }
 
+    // Trigger-ID fï¿½r andere VoiceTrigger verfï¿½gbar machen
+    public string GetTriggerId()
+    {
+        return triggerId;
+    }
+
     private System.Collections.IEnumerator PlayDialogue()
     {
-        // Bewegung sperren
-        if (lockMovement)
+        // ==========================================
+        // BEWEGUNG SPERREN
+        // ==========================================
+
+        if (lockMovement && player != null)
         {
             player.SetMovementEnabled(false);
         }
 
-        // Dialog abspielen
+        // ==========================================
+        // DIALOG ABSPIELEN
+        // ==========================================
+
         foreach (string line in dialogueLines)
         {
             if (string.IsNullOrWhiteSpace(line))
@@ -96,15 +155,25 @@ public class VoiceTrigger : MonoBehaviour
                 () => !VoiceManager.Instance.IsVoiceActive
             );
 
-            // Pause zwischen den Sätzen
+            // Pause zwischen den Sï¿½tzen
             yield return new WaitForSeconds(timeBetweenLines);
         }
 
-        // Bewegung wieder erlauben
-        if (lockMovement)
+        // ==========================================
+        // BEWEGUNG WIEDER ERLAUBEN
+        // ==========================================
+
+        if (lockMovement && player != null)
         {
             player.SetMovementEnabled(true);
         }
     }
-}
 
+    public void OnFocus()
+    {
+    }
+
+    public void OnLoseFocus()
+    {
+    }
+}

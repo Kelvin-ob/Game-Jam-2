@@ -13,39 +13,117 @@ public class NPC : MonoBehaviour
         Dead
     }
 
+    public enum DialogueSpeaker
+    {
+        NPC,
+        AI
+    }
+
+    [System.Serializable]
+    public class DialogueLine
+    {
+        public DialogueSpeaker speaker;
+
+        [TextArea(2, 5)]
+        public string text;
+    }
+
     [Header("References")]
     [SerializeField] private NavMeshAgent agent;
     [SerializeField] private Transform player;
     [SerializeField] private Animator animator;
+
     public bool openDoor;
 
-
+    // =========================================================
+    // JUMPSCARE
+    // =========================================================
 
     [Header("Jumpscare")]
     [SerializeField] private Transform jumpscarePosition;
     [SerializeField] private float jumpscareDuration = 1.5f;
-    [SerializeField] private float jumpscareMoveSpeed = 18f;
 
     [SerializeField] private CinemachineImpulseSource impulseSource;
     [SerializeField] private Vector3 hitImpulseForce = new Vector3(1f, 1f, 0f);
 
+    [Header("Jumpscare Sound")]
+    [SerializeField] private AudioClip jumpscareSound;
+    [SerializeField][Range(0f, 1f)] private float jumpscareVolume = 1f;
+
+    // =========================================================
+    // DIALOGUE
+    // =========================================================
+
+    [Header("Dialogue Sequence")]
+    [SerializeField] private DialogueLine[] dialogueSequence;
+
+    [SerializeField] private float npcTypingSpeed = 0.05f;
+    [SerializeField] private float npcDisplayDuration = 3f;
+    [SerializeField] private float delayBetweenLines = 0.5f;
+
+    // =========================================================
+    // NPC MUMBLING
+    // =========================================================
+
+    [Header("NPC Mumbling")]
+    [SerializeField] private AudioClip npcMumblingSound;
+    [SerializeField][Range(0f, 1f)] private float npcMumblingVolume = 0.4f;
+
+    private AudioSource npcMumblingSource;
+
+
+    [Header("Chase Music")]
+    [SerializeField] private AudioClip chaseMusic;
+    [SerializeField][Range(0f, 1f)] private float chaseMusicVolume = 0.7f;
+
+    private AudioSource chaseMusicSource;
+
+    // =========================================================
+    // AI
+    // =========================================================
+
+    [Header("AI Dialogue")]
+    [SerializeField] private VoiceTrigger aiVoiceTrigger;
+
+    // =========================================================
+    // PLAYER
+    // =========================================================
+
     [Header("Player")]
     [SerializeField] private Transform respawnPoint;
+
+    [Header("Movement Lock")]
+    [SerializeField] private bool lockPlayerDuringDialogue = true;
+
+    // =========================================================
+    // CHASE
+    // =========================================================
 
     [Header("Chase")]
     [SerializeField] private float chaseSpeed = 5f;
     [SerializeField] private float catchDistance = 1.5f;
+
+    // =========================================================
+    // HEALTH
+    // =========================================================
 
     [Header("Health")]
     [SerializeField] private int health = 1;
 
     [SerializeField] private string sceneToLoad = "";
 
+    // =========================================================
+    // PRIVATE
+    // =========================================================
+
     private EnemyState currentState = EnemyState.Idle;
     private Collider npcCollider;
-
     private bool sequenceStarted = false;
 
+
+    // =========================================================
+    // AWAKE
+    // =========================================================
 
     private void Awake()
     {
@@ -61,14 +139,40 @@ public class NPC : MonoBehaviour
         }
 
         npcCollider = GetComponent<Collider>();
+
         if (npcCollider == null)
             npcCollider = GetComponentInChildren<Collider>();
 
-        // Startzustand
         openDoor = false;
+
         SetRunning(false);
+
+        // NPC Mumbling AudioSource
+        npcMumblingSource = gameObject.AddComponent<AudioSource>();
+
+        npcMumblingSource.playOnAwake = false;
+        npcMumblingSource.loop = true;
+        npcMumblingSource.spatialBlend = 0f;
+        npcMumblingSource.volume = npcMumblingVolume;
+
+        if (npcMumblingSound != null)
+        {
+            npcMumblingSource.clip = npcMumblingSound;
+        }
+
+        chaseMusicSource = gameObject.AddComponent<AudioSource>();
+
+        chaseMusicSource.playOnAwake = false;
+        chaseMusicSource.loop = true;
+        chaseMusicSource.spatialBlend = 0f;
+        chaseMusicSource.volume = chaseMusicVolume;
+        chaseMusicSource.clip = chaseMusic;
     }
 
+
+    // =========================================================
+    // UPDATE
+    // =========================================================
 
     private void Update()
     {
@@ -78,11 +182,14 @@ public class NPC : MonoBehaviour
             case EnemyState.Jumpscare:
             case EnemyState.Talking:
             case EnemyState.Dead:
+
                 SetRunning(false);
                 break;
 
             case EnemyState.Chasing:
+
                 SetRunning(true);
+
                 ChasePlayer();
 
                 if (IsPlayerCaughtByDistance())
@@ -94,7 +201,7 @@ public class NPC : MonoBehaviour
 
 
     // =========================================================
-    // SEQUENCE
+    // START SEQUENCE
     // =========================================================
 
     public void StartSequence()
@@ -108,9 +215,14 @@ public class NPC : MonoBehaviour
     }
 
 
+    // =========================================================
+    // JUMPSCARE SEQUENCE
+    // =========================================================
+
     private System.Collections.IEnumerator JumpscareSequence()
     {
         currentState = EnemyState.Jumpscare;
+
         SetRunning(false);
 
         if (agent != null)
@@ -119,17 +231,38 @@ public class NPC : MonoBehaviour
             agent.ResetPath();
         }
 
+        // Jumpscare Sound
+        if (jumpscareSound != null)
+        {
+            AudioSource.PlayClipAtPoint(
+                jumpscareSound,
+                jumpscarePosition != null
+                    ? jumpscarePosition.position
+                    : transform.position,
+                jumpscareVolume
+            );
+        }
+
+        // NPC zur Jumpscare-Position
         if (jumpscarePosition != null)
         {
             Vector3 startPosition = transform.position;
+
             float elapsedTime = 0f;
             float moveDuration = 0.2f;
 
             while (elapsedTime < moveDuration)
             {
                 float t = elapsedTime / moveDuration;
-                transform.position = Vector3.Lerp(startPosition, jumpscarePosition.position, t);
+
+                transform.position = Vector3.Lerp(
+                    startPosition,
+                    jumpscarePosition.position,
+                    t
+                );
+
                 elapsedTime += Time.deltaTime;
+
                 yield return null;
             }
 
@@ -139,35 +272,161 @@ public class NPC : MonoBehaviour
             if (agent != null)
                 agent.Warp(jumpscarePosition.position);
         }
+
+        // Camera Shake
         if (impulseSource != null)
-            {
-                impulseSource.GenerateImpulse(hitImpulseForce);
-            }
+        {
+            impulseSource.GenerateImpulse(hitImpulseForce);
+        }
+
         Debug.Log("JUMPSCARE!");
 
         yield return new WaitForSeconds(jumpscareDuration);
 
-        StartTalking();
-    }
+        // =====================================================
+        // TALKING START
+        // =====================================================
 
-
-    // =========================================================
-    // TALKING
-    // =========================================================
-
-    private void StartTalking()
-    {
         currentState = EnemyState.Talking;
 
         SetRunning(false);
 
-        agent.isStopped = true;
+        if (agent != null)
+            agent.isStopped = true;
 
-        Debug.Log("Enemy beginnt zu reden.");
+        // Spieler kann sich während des gesamten Dialogs nicht bewegen
+        if (lockPlayerDuringDialogue)
+            SetPlayerMovement(false);
 
-        // TEMPORÄR:
-        // Später hier dein Voice-/Dialogue-System aufrufen.
-        Invoke(nameof(StartChase), 3f);
+        // =====================================================
+        // FLEXIBLE DIALOGUE SEQUENCE
+        // =====================================================
+
+        if (dialogueSequence != null)
+        {
+            foreach (DialogueLine dialogueLine in dialogueSequence)
+            {
+                if (dialogueLine == null)
+                    continue;
+
+                if (string.IsNullOrWhiteSpace(dialogueLine.text) &&
+                    dialogueLine.speaker == DialogueSpeaker.NPC)
+                    continue;
+
+                // =================================================
+                // NPC SPRICHT
+                // =================================================
+
+                if (dialogueLine.speaker == DialogueSpeaker.NPC)
+                {
+                    StartNpcMumbling();
+
+                    if (VoiceManager.Instance != null)
+                    {
+                        VoiceManager.Instance.ShowVoice(
+                            dialogueLine.text,
+                            npcTypingSpeed,
+                            npcDisplayDuration
+                        );
+
+                        yield return new WaitUntil(
+                            () => !VoiceManager.Instance.IsVoiceActive
+                        );
+                    }
+
+                    StopNpcMumbling();
+                }
+
+                // =================================================
+                // AI SPRICHT
+                // =================================================
+
+                else if (dialogueLine.speaker == DialogueSpeaker.AI)
+                {
+                    if (aiVoiceTrigger != null)
+                    {
+                        aiVoiceTrigger.TriggerVoice();
+
+                        if (VoiceManager.Instance != null)
+                        {
+                            yield return new WaitUntil(
+                                () => !VoiceManager.Instance.IsVoiceActive
+                            );
+                        }
+                    }
+                }
+
+                // Pause zwischen den Dialogzeilen
+                if (delayBetweenLines > 0f)
+                {
+                    yield return new WaitForSeconds(
+                        delayBetweenLines
+                    );
+                }
+            }
+        }
+
+        StopNpcMumbling();
+
+        // =====================================================
+        // MOVEMENT FREIGEBEN
+        // =====================================================
+
+        if (lockPlayerDuringDialogue)
+            SetPlayerMovement(true);
+
+        // =====================================================
+        // CHASE
+        // =====================================================
+
+        StartChase();
+    }
+
+
+    // =========================================================
+    // NPC MUMBLING
+    // =========================================================
+
+    private void StartNpcMumbling()
+    {
+        if (npcMumblingSource == null)
+            return;
+
+        if (npcMumblingSound == null)
+            return;
+
+        npcMumblingSource.volume = npcMumblingVolume;
+
+        if (!npcMumblingSource.isPlaying)
+            npcMumblingSource.Play();
+    }
+
+
+    private void StopNpcMumbling()
+    {
+        if (npcMumblingSource == null)
+            return;
+
+        if (npcMumblingSource.isPlaying)
+            npcMumblingSource.Stop();
+    }
+
+
+    // =========================================================
+    // PLAYER MOVEMENT
+    // =========================================================
+
+    private void SetPlayerMovement(bool enabled)
+    {
+        if (player == null)
+            return;
+
+        Player playerScript = player.GetComponent<Player>();
+
+        if (playerScript != null)
+        {
+            playerScript.SetMovementEnabled(enabled);
+        }
     }
 
 
@@ -180,17 +439,38 @@ public class NPC : MonoBehaviour
         if (currentState == EnemyState.Dead)
             return;
 
-        CancelInvoke(nameof(StartChase));
-
         currentState = EnemyState.Chasing;
 
-        agent.isStopped = false;
-        agent.speed = chaseSpeed;
+        if (agent != null)
+        {
+            agent.enabled = true;
+            agent.isStopped = false;
+            agent.speed = chaseSpeed;
+        }
 
         SetRunning(true);
+
         openDoor = true;
 
+        // =========================================
+        // CHASE MUSIC
+        // =========================================
+
+        if (chaseMusic != null)
+        {
+            if (chaseMusicSource != null && chaseMusic != null)
+            {
+                chaseMusicSource.Play();
+            }
+            
+        }
+
         Debug.Log("CHASE START!");
+    }
+
+    public bool IsChasing()
+    {
+        return currentState == EnemyState.Chasing;
     }
 
 
@@ -199,7 +479,7 @@ public class NPC : MonoBehaviour
         if (player == null)
             return;
 
-        if (!agent.enabled)
+        if (agent == null || !agent.enabled)
             return;
 
         agent.SetDestination(player.position);
@@ -215,9 +495,14 @@ public class NPC : MonoBehaviour
         if (player == null)
             return false;
 
-        float distance = Vector3.Distance(transform.position, player.position);
+        float distance = Vector3.Distance(
+            transform.position,
+            player.position
+        );
+
         return distance <= catchDistance;
     }
+
 
     public void PlayerCaught()
     {
@@ -227,8 +512,10 @@ public class NPC : MonoBehaviour
         Debug.Log("Spieler wurde erwischt!");
 
         changeScene();
+
         openDoor = false;
     }
+
 
     // =========================================================
     // DAMAGE
@@ -244,9 +531,7 @@ public class NPC : MonoBehaviour
         Debug.Log("Enemy Damage: " + damage);
 
         if (health <= 0)
-        {
             Die();
-        }
     }
 
 
@@ -261,7 +546,12 @@ public class NPC : MonoBehaviour
 
         currentState = EnemyState.Dead;
 
-        animator.SetBool("IsDead", true);
+        StopNpcMumbling();
+
+        SetPlayerMovement(true);
+
+        if (animator != null)
+            animator.SetBool("IsDead", true);
 
         if (agent != null)
         {
@@ -270,16 +560,16 @@ public class NPC : MonoBehaviour
         }
 
         Collider[] colliders = GetComponentsInChildren<Collider>();
+
         foreach (Collider col in colliders)
-        {
             col.enabled = false;
-        }
 
         if (npcCollider != null)
             npcCollider.enabled = false;
 
         Debug.Log("Enemy ist tot!");
     }
+
 
     // =========================================================
     // ANIMATION
@@ -293,9 +583,17 @@ public class NPC : MonoBehaviour
         animator.SetBool("IsRunning", running);
     }
 
+
+    // =========================================================
+    // STOP TRIGGER
+    // =========================================================
+
     public void stopTrigger()
     {
         currentState = EnemyState.Idle;
+
+        StopNpcMumbling();
+
         SetRunning(false);
 
         if (agent != null)
@@ -305,6 +603,11 @@ public class NPC : MonoBehaviour
             agent.enabled = false;
         }
     }
+
+
+    // =========================================================
+    // SCENE CHANGE
+    // =========================================================
 
     private void changeScene()
     {
@@ -319,4 +622,5 @@ public class NPC : MonoBehaviour
             Debug.LogError("Kein SceneFader in der Szene gefunden!");
         }
     }
+
 }

@@ -16,11 +16,23 @@ public class VoiceManager : MonoBehaviour
     [Header("Typewriter Sound")]
     [SerializeField] private AudioSource typewriterAudio;
     [SerializeField] private AudioClip typewriterSound;
+
+    [Tooltip("Wie oft der Typewriter-Sound maximal abgespielt wird.")]
     [SerializeField] private float typewriterSoundInterval = 0.05f;
+
+    [Tooltip("Lautstärke des Typewriter-Sounds.")]
+    [SerializeField][Range(0f, 1f)] private float typewriterVolume = 0.5f;
 
     private Coroutine currentRoutine;
 
+    private float lastTypewriterSoundTime = -999f;
+
     public bool IsVoiceActive { get; private set; }
+
+
+    // =========================================================
+    // AWAKE
+    // =========================================================
 
     private void Awake()
     {
@@ -33,14 +45,20 @@ public class VoiceManager : MonoBehaviour
         Instance = this;
     }
 
+
     // =========================================================
     // NORMAL VOICE
     // =========================================================
 
     public void ShowVoice(string text)
     {
-        ShowVoice(text, typingSpeed, displayDuration);
+        ShowVoice(
+            text,
+            typingSpeed,
+            displayDuration
+        );
     }
+
 
     public void ShowVoice(
         string text,
@@ -48,7 +66,11 @@ public class VoiceManager : MonoBehaviour
         float customDisplayDuration)
     {
         if (currentRoutine != null)
+        {
             StopCoroutine(currentRoutine);
+        }
+
+        StopTypewriterSound();
 
         currentRoutine = StartCoroutine(
             ShowVoiceRoutine(
@@ -59,6 +81,7 @@ public class VoiceManager : MonoBehaviour
         );
     }
 
+
     private IEnumerator ShowVoiceRoutine(
         string text,
         float customTypingSpeed,
@@ -68,27 +91,53 @@ public class VoiceManager : MonoBehaviour
 
         voiceText.gameObject.SetActive(true);
 
-        // Text zunächst leer
         voiceText.text = "";
 
-        // Typewriter
+        lastTypewriterSoundTime = -999f;
+
+
+        // =====================================================
+        // TYPEWRITER
+        // =====================================================
+
         for (int i = 0; i < text.Length; i++)
         {
             voiceText.text += text[i];
 
-            PlayTypewriterSound();
+
+            // Typewriter-Sound
+            if (!char.IsWhiteSpace(text[i]))
+            {
+                PlayTypewriterSound();
+            }
+
 
             yield return new WaitForSeconds(customTypingSpeed);
         }
 
-        // Text stehen lassen
-        yield return new WaitForSeconds(customDisplayDuration);
+
+        // =====================================================
+        // TEXT STEHEN LASSEN
+        // =====================================================
+
+        StopTypewriterSound();
+
+        yield return new WaitForSeconds(
+            customDisplayDuration
+        );
+
+
+        // =====================================================
+        // ENDE
+        // =====================================================
 
         voiceText.gameObject.SetActive(false);
 
         IsVoiceActive = false;
+
         currentRoutine = null;
     }
+
 
     // =========================================================
     // PICKUP DIALOGUE
@@ -102,7 +151,11 @@ public class VoiceManager : MonoBehaviour
         float timeBetweenLines)
     {
         if (currentRoutine != null)
+        {
             StopCoroutine(currentRoutine);
+        }
+
+        StopTypewriterSound();
 
         currentRoutine = StartCoroutine(
             PickupDialogueRoutine(
@@ -115,6 +168,7 @@ public class VoiceManager : MonoBehaviour
         );
     }
 
+
     private IEnumerator PickupDialogueRoutine(
         string[] lines,
         float delay,
@@ -124,14 +178,26 @@ public class VoiceManager : MonoBehaviour
     {
         IsVoiceActive = true;
 
-        // Delay bevor die AI spricht
+
+        // =====================================================
+        // DELAY
+        // =====================================================
+
         if (delay > 0f)
+        {
             yield return new WaitForSeconds(delay);
+        }
+
+
+        // =====================================================
+        // DIALOGUE
+        // =====================================================
 
         foreach (string line in lines)
         {
             if (string.IsNullOrWhiteSpace(line))
                 continue;
+
 
             yield return StartCoroutine(
                 ShowVoiceLine(
@@ -141,16 +207,29 @@ public class VoiceManager : MonoBehaviour
                 )
             );
 
-            // Pause zwischen den Zeilen
+
             if (timeBetweenLines > 0f)
-                yield return new WaitForSeconds(timeBetweenLines);
+            {
+                yield return new WaitForSeconds(
+                    timeBetweenLines
+                );
+            }
         }
+
+
+        // =====================================================
+        // ENDE
+        // =====================================================
+
+        StopTypewriterSound();
 
         voiceText.gameObject.SetActive(false);
 
         IsVoiceActive = false;
+
         currentRoutine = null;
     }
+
 
     // =========================================================
     // SINGLE LINE
@@ -165,17 +244,33 @@ public class VoiceManager : MonoBehaviour
 
         voiceText.text = "";
 
+        lastTypewriterSoundTime = -999f;
+
+
         for (int i = 0; i < text.Length; i++)
         {
             voiceText.text += text[i];
 
-            PlayTypewriterSound();
 
-            yield return new WaitForSeconds(customTypingSpeed);
+            if (!char.IsWhiteSpace(text[i]))
+            {
+                PlayTypewriterSound();
+            }
+
+
+            yield return new WaitForSeconds(
+                customTypingSpeed
+            );
         }
 
-        yield return new WaitForSeconds(customDisplayDuration);
+
+        StopTypewriterSound();
+
+        yield return new WaitForSeconds(
+            customDisplayDuration
+        );
     }
+
 
     // =========================================================
     // TYPEWRITER SOUND
@@ -183,10 +278,40 @@ public class VoiceManager : MonoBehaviour
 
     private void PlayTypewriterSound()
     {
-        if (typewriterAudio == null || typewriterSound == null)
+        if (typewriterAudio == null)
             return;
 
-        typewriterAudio.PlayOneShot(typewriterSound);
+        if (typewriterSound == null)
+            return;
+
+
+        // Verhindert zu schnelles Überlappen
+        if (Time.time - lastTypewriterSoundTime <
+            typewriterSoundInterval)
+        {
+            return;
+        }
+
+
+        lastTypewriterSoundTime = Time.time;
+
+        typewriterAudio.PlayOneShot(
+            typewriterSound,
+            typewriterVolume
+        );
+    }
+
+
+    // =========================================================
+    // STOP TYPEWRITER
+    // =========================================================
+
+    private void StopTypewriterSound()
+    {
+        if (typewriterAudio == null)
+            return;
+
+        typewriterAudio.Stop();
     }
 }
 
