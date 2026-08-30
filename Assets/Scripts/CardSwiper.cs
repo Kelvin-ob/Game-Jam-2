@@ -3,11 +3,17 @@ using UnityEngine;
 public class CardSwiper : MonoBehaviour, IInteractable
 {
     [SerializeField] private DoorInteraction linkedDoor;
+
+    [Header("Keycard")]
     [SerializeField] private string requiredItemId = "keycard";
 
     [TextArea(2, 5)]
     [SerializeField] private string promptText = "Swipe card";
-    [SerializeField] private string lockedMessage = "You need a keycard";
+
+    [SerializeField] private string lockedMessage = "You need an activated keycard";
+
+    [Header("Voice")]
+    [SerializeField] private VoiceTrigger notActivatedVoiceTrigger;
 
     [Header("Swipe Sound")]
     [SerializeField] private AudioClip swipeSound;
@@ -20,7 +26,7 @@ public class CardSwiper : MonoBehaviour, IInteractable
 
     private void Start()
     {
-        // Prüfen, ob die Karte bereits geswiped wurde
+        // Prüfen, ob bereits geswiped wurde
         if (GameStateManager.Instance != null &&
             GameStateManager.Instance.IsItemCollected(swipeStateId))
         {
@@ -30,24 +36,53 @@ public class CardSwiper : MonoBehaviour, IInteractable
 
     public void Interact()
     {
-        // Wenn bereits geswiped wurde
+        // =========================
+        // BEREITS GESWIPED
+        // =========================
+
         if (hasSwiped)
         {
             InteractPromptManager.Instance.showPrompt("Already unlocked");
             return;
         }
 
-        // Prüfen, ob Spieler die Keycard besitzt
-        if (!InventoryManager.Instance.HasItem(requiredItemId))
+        // =========================
+        // KEYCARD BESITZEN?
+        // =========================
+
+        if (InventoryManager.Instance == null ||
+            !InventoryManager.Instance.HasItem(requiredItemId))
         {
             StartCoroutine(ShowLockedMessage());
             return;
         }
 
-        // Tür entsperren
+        // =========================
+        // KEYCARD AKTIVIERT?
+        // =========================
+
+        if (GameStateManager.Instance == null ||
+            !GameStateManager.Instance.IsKeycardActivated())
+        {
+            InteractPromptManager.Instance.showPrompt(
+                "Keycard needs to be activated"
+            );
+
+            // AI-Dialog starten
+            if (notActivatedVoiceTrigger != null)
+            {
+                notActivatedVoiceTrigger.TriggerVoice();
+            }
+
+            return;
+        }
+
+        // =========================
+        // TÜR ENTSPERREN
+        // =========================
+
         linkedDoor.Unlock();
 
-        // Als geswiped speichern
         hasSwiped = true;
 
         if (GameStateManager.Instance != null)
@@ -55,7 +90,10 @@ public class CardSwiper : MonoBehaviour, IInteractable
             GameStateManager.Instance.SetItemCollected(swipeStateId);
         }
 
-        // Swipe-Sound nur beim ersten erfolgreichen Swipe
+        // =========================
+        // SWIPE SOUND
+        // =========================
+
         if (swipeSound != null)
         {
             AudioSource.PlayClipAtPoint(
@@ -65,8 +103,9 @@ public class CardSwiper : MonoBehaviour, IInteractable
             );
         }
 
-        // Bestätigung
-        InteractPromptManager.Instance.showPrompt("Card accepted");
+        InteractPromptManager.Instance.showPrompt(
+            "Card accepted"
+        );
     }
 
     private System.Collections.IEnumerator ShowLockedMessage()
@@ -75,7 +114,14 @@ public class CardSwiper : MonoBehaviour, IInteractable
 
         yield return new WaitForSeconds(2f);
 
-        InteractPromptManager.Instance.showPrompt(promptText);
+        if (hasSwiped)
+        {
+            InteractPromptManager.Instance.showPrompt("Already unlocked");
+        }
+        else
+        {
+            InteractPromptManager.Instance.showPrompt(promptText);
+        }
     }
 
     public void OnFocus()
