@@ -23,6 +23,13 @@ public class PCInteraction : MonoBehaviour, IInteractable
     [SerializeField] private GameObject progressUI;
     [SerializeField] private Image progressCircle;
 
+    [Header("Post-Activation Voice")]
+    [TextArea(2, 5)]
+    [SerializeField] private string[] postActivationDialogueLines;
+    [SerializeField] private float voiceTypingSpeed = 0.05f;
+    [SerializeField] private float voiceDisplayDuration = 3f;
+    [SerializeField] private float voicePauseBetweenLines = 1f;
+
     [Header("Sound")]
     [SerializeField] private AudioClip activateSound;
     [SerializeField][Range(0f, 1f)] private float activateVolume = 1f;
@@ -92,6 +99,17 @@ public class PCInteraction : MonoBehaviour, IInteractable
 
     public void Interact()
     {
+        // ==========================================
+        // TELEFON MUSS ERST ANTWORTEN WURDEN SEIN
+        // ==========================================
+
+        if (GameStateManager.Instance == null ||
+            !GameStateManager.Instance.IsItemCollected("phone_answered"))
+        {
+            InteractPromptManager.Instance.showPrompt("I should answer the phone first.");
+            return;
+        }
+
         // ==========================================
         // KEYCARD BEREITS AKTIVIERT
         // ==========================================
@@ -266,6 +284,16 @@ public class PCInteraction : MonoBehaviour, IInteractable
             GameStateManager.Instance.SetKeycardActivated();
         }
 
+        if (InventoryManager.Instance != null)
+        {
+            InventoryManager.Instance.AddItem("keycard_activated");
+        }
+
+        if (VoiceManager.Instance != null)
+        {
+            StartCoroutine(PlayPostActivationVoice());
+        }
+
         // ==========================================
         // BESTÄTIGUNG
         // ==========================================
@@ -275,9 +303,41 @@ public class PCInteraction : MonoBehaviour, IInteractable
         );
     }
 
+    private System.Collections.IEnumerator PlayPostActivationVoice()
+    {
+        if (postActivationDialogueLines == null || postActivationDialogueLines.Length == 0)
+            yield break;
+
+        Player player = FindFirstObjectByType<Player>();
+        if (player != null)
+            player.SetMovementEnabled(false);
+
+        foreach (string line in postActivationDialogueLines)
+        {
+            if (string.IsNullOrWhiteSpace(line))
+                continue;
+
+            VoiceManager.Instance.ShowVoice(line, voiceTypingSpeed, voiceDisplayDuration);
+            yield return new WaitUntil(() => !VoiceManager.Instance.IsVoiceActive);
+
+            if (voicePauseBetweenLines > 0f)
+                yield return new WaitForSeconds(voicePauseBetweenLines);
+        }
+
+        if (player != null)
+            player.SetMovementEnabled(true);
+    }
+
     public void OnFocus()
     {
         isFocused = true;
+
+        if (GameStateManager.Instance == null ||
+            !GameStateManager.Instance.IsItemCollected("phone_answered"))
+        {
+            InteractPromptManager.Instance.showPrompt("I should answer the phone first.");
+            return;
+        }
 
         // ==========================================
         // KEYCARD BEREITS AKTIVIERT

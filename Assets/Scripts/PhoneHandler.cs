@@ -1,5 +1,4 @@
 using System.Collections;
-using DialogueEditor;
 using UnityEngine;
 
 public class PhoneHandler : MonoBehaviour, IInteractable
@@ -7,8 +6,15 @@ public class PhoneHandler : MonoBehaviour, IInteractable
     [Header("Generator Check")]
     [SerializeField] private string generatorId = "generator_01";
 
+    [Header("Dialogue")]
+    [SerializeField] private NPCVoiceManager npcVoiceManager;
+    [TextArea(2, 5)]
+    [SerializeField] private string[] phoneDialogueLines;
+    [SerializeField] private float typingSpeed = 0.05f;
+    [SerializeField] private float displayDuration = 3f;
+    [SerializeField] private float timeBetweenLines = 1f;
+
     [Header("Interaction")]
-    [SerializeField] private NPCConversation phoneConversation;
     [SerializeField] private string promptText = "Press E to answer";
 
     [Header("Ring Sound")]
@@ -18,11 +24,15 @@ public class PhoneHandler : MonoBehaviour, IInteractable
 
     private bool hasAnswered = false;
     private bool isRinging = false;
+    private Coroutine ringRoutine;
+    private Player player;
 
     private void Start()
     {
         if (audioSource == null)
             audioSource = GetComponent<AudioSource>();
+
+        player = FindFirstObjectByType<Player>();
 
         TryStartRingingIfGeneratorActive();
     }
@@ -32,8 +42,10 @@ public class PhoneHandler : MonoBehaviour, IInteractable
         if (hasAnswered)
             return;
 
-        if (GameStateManager.Instance != null &&
-            GameStateManager.Instance.IsGeneratorActivated(generatorId))
+        bool generatorActive = GameStateManager.Instance != null &&
+            GameStateManager.Instance.IsGeneratorActivated(generatorId);
+
+        if (generatorActive)
         {
             StartRinging();
         }
@@ -51,14 +63,25 @@ public class PhoneHandler : MonoBehaviour, IInteractable
         hasAnswered = true;
         StopRinging();
 
-        if (phoneConversation != null && ConversationManager.Instance != null)
+        if (GameStateManager.Instance != null)
         {
-            ConversationManager.Instance.StartConversation(phoneConversation);
+            GameStateManager.Instance.SetItemCollected("phone_answered");
         }
-        else
+
+        if (player != null)
         {
-            Debug.LogWarning("PhoneConversation or ConversationManager not assigned.");
+            player.SetMovementEnabled(false);
         }
+
+        if (npcVoiceManager == null)
+        {
+            Debug.LogWarning("NPCVoiceManager is missing for phone dialogue.");
+            if (player != null)
+                player.SetMovementEnabled(true);
+            return;
+        }
+
+        StartCoroutine(PlayPhoneDialogue());
     }
 
     public void OnFocus()
@@ -85,6 +108,21 @@ public class PhoneHandler : MonoBehaviour, IInteractable
         }
     }
 
+    private IEnumerator PlayPhoneDialogue()
+    {
+        if (npcVoiceManager == null)
+            yield break;
+
+        npcVoiceManager.ShowDialogue(phoneDialogueLines);
+
+        yield return new WaitUntil(() => !npcVoiceManager.IsVoiceActive);
+
+        if (player != null)
+        {
+            player.SetMovementEnabled(true);
+        }
+    }
+
     private void StartRinging()
     {
         if (hasAnswered || isRinging)
@@ -97,10 +135,10 @@ public class PhoneHandler : MonoBehaviour, IInteractable
             audioSource.clip = ringClip;
             audioSource.loop = true;
             audioSource.Play();
-            return;
         }
 
-        StartCoroutine(RingLoop());
+        if (ringRoutine == null)
+            ringRoutine = StartCoroutine(RingLoop());
     }
 
     private void StopRinging()
@@ -113,21 +151,30 @@ public class PhoneHandler : MonoBehaviour, IInteractable
             audioSource.Stop();
         }
 
-        StopCoroutine(RingLoop());
+        if (ringRoutine != null)
+        {
+            StopCoroutine(ringRoutine);
+            ringRoutine = null;
+        }
     }
 
     private IEnumerator RingLoop()
     {
         while (isRinging)
         {
-            if (audioSource != null && !audioSource.isPlaying && ringClip != null)
+            if (audioSource != null && ringClip != null)
             {
-                audioSource.clip = ringClip;
-                audioSource.loop = true;
-                audioSource.Play();
+                if (!audioSource.isPlaying)
+                {
+                    audioSource.clip = ringClip;
+                    audioSource.loop = true;
+                    audioSource.Play();
+                }
             }
 
             yield return new WaitForSeconds(ringInterval);
         }
+
+        ringRoutine = null;
     }
 }
