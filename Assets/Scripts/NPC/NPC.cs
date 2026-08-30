@@ -184,8 +184,12 @@ public class NPC : MonoBehaviour
 
         currentState = EnemyState.Chasing;
 
-        agent.isStopped = false;
-        agent.speed = chaseSpeed;
+        if (agent != null)
+        {
+            agent.enabled = true;
+            agent.isStopped = false;
+            agent.speed = chaseSpeed;
+        }
 
         SetRunning(true);
         openDoor = true;

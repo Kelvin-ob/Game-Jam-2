@@ -1,45 +1,35 @@
 using DialogueEditor;
 using UnityEngine;
 using UnityEngine.InputSystem;
-
+using UnityEngine.UI; // NEU
 
 interface IInteractable
 {
-    public void Interact(); // called when player interacts with the object (presses E)
-    public void OnFocus();  // called when raycast is on the object
-    public void OnLoseFocus(); // called when raycast is not on the object anymore
+    public void Interact();
+    public void OnFocus();
+    public void OnLoseFocus();
 }
 
 public class Interactor : MonoBehaviour
 {
-
     public Transform InteractorSource;
     [SerializeField] public float InteractRange;
-    [SerializeField] private GameObject crosshair;
-    [SerializeField] private GameObject crosshairtargethit;
+    [SerializeField] private Image crosshairImage; // GEÄNDERT: nur noch ein Image statt 2 GameObjects
 
-    private IInteractable currentInteractable; // what player is looking at in the moment
+    [Header("Crosshair Colors")]
+    [SerializeField] private Color normalColor = Color.white;
+    [SerializeField] private Color focusColor = Color.red;
 
-    private void OnEnable()
-    {
-        
-    }
+    private IInteractable currentInteractable;
 
-    private void OnDisable()
-    {
-        
-    }
-
-    // Update is called once per frame
     void Update()
     {
-
-        if (ConversationManager.Instance != null && ConversationManager.Instance.IsConversationActive) // so that no  interaction triggers the same dialogue instantly
+        if (ConversationManager.Instance != null && ConversationManager.Instance.IsConversationActive)
         {
             return;
         }
 
-        if (currentInteractable is MonoBehaviour mb && mb == null) //echter unity Objektyp (sauwy needed help here)
+        if (currentInteractable is MonoBehaviour mb && mb == null)
         {
             currentInteractable = null;
         }
@@ -48,8 +38,7 @@ public class Interactor : MonoBehaviour
         bool hitSomething = Physics.Raycast(ray, out RaycastHit hitInfo, InteractRange);
 
         IInteractable hitInteractable = null;
-
-        if (hitSomething) // if somethin is found get try to get the component (cube, npc etc.)
+        if (hitSomething)
         {
             hitInteractable = hitInfo.collider.GetComponentInParent<IInteractable>();
         }
@@ -61,8 +50,9 @@ public class Interactor : MonoBehaviour
             currentInteractable?.OnFocus();
         }
 
-        crosshairtargethit.SetActive(currentInteractable != null); // show crosshair only when there is somethin interactable
-        crosshair.SetActive(true); 
+        Debug.Log("Fokus: " + (currentInteractable != null) + " | Farbe wird gesetzt auf: " + (currentInteractable != null ? focusColor : normalColor));
+
+        crosshairImage.color = currentInteractable != null ? focusColor : normalColor;
 
         if (Keyboard.current.eKey.wasPressedThisFrame && currentInteractable != null)
         {

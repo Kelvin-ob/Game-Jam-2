@@ -17,15 +17,11 @@ public class VoiceManager : MonoBehaviour
     [SerializeField] private AudioSource typewriterAudio;
     [SerializeField] private AudioClip typewriterSound;
 
-    [Tooltip("Wie oft der Typewriter-Sound maximal abgespielt wird.")]
-    [SerializeField] private float typewriterSoundInterval = 0.05f;
 
     [Tooltip("Lautstärke des Typewriter-Sounds.")]
     [SerializeField][Range(0f, 1f)] private float typewriterVolume = 0.5f;
 
     private Coroutine currentRoutine;
-
-    private float lastTypewriterSoundTime = -999f;
 
     public bool IsVoiceActive { get; private set; }
 
@@ -92,10 +88,6 @@ public class VoiceManager : MonoBehaviour
         voiceText.gameObject.SetActive(true);
 
         voiceText.text = "";
-
-        lastTypewriterSoundTime = -999f;
-
-
         // =====================================================
         // TYPEWRITER
         // =====================================================
@@ -244,9 +236,6 @@ public class VoiceManager : MonoBehaviour
 
         voiceText.text = "";
 
-        lastTypewriterSoundTime = -999f;
-
-
         for (int i = 0; i < text.Length; i++)
         {
             voiceText.text += text[i];
@@ -283,17 +272,6 @@ public class VoiceManager : MonoBehaviour
 
         if (typewriterSound == null)
             return;
-
-
-        // Verhindert zu schnelles Überlappen
-        if (Time.time - lastTypewriterSoundTime <
-            typewriterSoundInterval)
-        {
-            return;
-        }
-
-
-        lastTypewriterSoundTime = Time.time;
 
         typewriterAudio.PlayOneShot(
             typewriterSound,

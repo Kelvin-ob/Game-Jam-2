@@ -2999,6 +2999,103 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 7938916400893500690, guid: b9cac9247177dc64a9eb3f1729e44490, type: 3}
   m_PrefabInstance: {fileID: 861154474}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &422931047
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 422931051}
+  - component: {fileID: 422931050}
+  - component: {fileID: 422931049}
+  - component: {fileID: 422931048}
+  m_Layer: 0
+  m_Name: ChaseAITrigger
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &422931048
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 422931047}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0930dcf746ab17247bbef3c835b3a0ec, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ChaseAITrigger
+  enemy: {fileID: 2093375957}
+  aiVoiceTrigger: {fileID: 422931049}
+--- !u!114 &422931049
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 422931047}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6c4eb470a1beac740a27535f9ccffb79, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::VoiceTrigger
+  triggerId: chase_triggerRun
+  triggerOnce: 1
+  dialogueLines:
+  - Run Fast!
+  - Do not look back.
+  - He wants to kill you.
+  - Go left.
+  - At the end of the hall is a door.
+  - On the right side.
+  typingSpeed: 0.05
+  displayDuration: 1.5
+  timeBetweenLines: 0.6
+  requiredTriggers: []
+  requiredItems: []
+  player: {fileID: 1988015106}
+  lockMovement: 0
+--- !u!65 &422931050
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 422931047}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1.9618359, y: 1.5943906, z: 6.4857254}
+  m_Center: {x: -0.48091793, y: 0.092300534, z: -0.45476913}
+--- !u!4 &422931051
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 422931047}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 31.5, y: 0.42, z: 61.09}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &429207931
 GameObject:
   m_ObjectHideFlags: 0
@@ -17500,19 +17597,25 @@ MonoBehaviour:
   hitImpulseForce: {x: 0.2, y: 0.02, z: 0}
   jumpscareSound: {fileID: 8300000, guid: e2b351d3ae7700c42a63596ac45a7d60, type: 3}
   jumpscareVolume: 1
-  npcDialogue:
-  - Hey man!
-  - 
-  - 
-  - 
-  - 
+  dialogueSequence:
+  - speaker: 0
+    text: Hey man!
+  - speaker: 0
+    text: I finally found you.
+  - speaker: 0
+    text: Sorry, but I can't let you pass.
+  - speaker: 1
+    text: He is a threat.
+  - speaker: 0
+    text: Don't worry. You won't feel it.
   npcTypingSpeed: 0.05
   npcDisplayDuration: 3
-  delayBetweenNpcLines: 0.5
-  npcMumblingSound: {fileID: 8300000, guid: 339307262ace12e4283ba641ac8e45c1, type: 3}
+  delayBetweenLines: 0.5
+  npcMumblingSound: {fileID: 0}
   npcMumblingVolume: 0.4
+  chaseMusic: {fileID: 8300000, guid: 56358ed1f8779e441abfec150fc23772, type: 3}
+  chaseMusicVolume: 1
   aiVoiceTrigger: {fileID: 884488095}
-  aiInterferenceAfterNpcLine: 1
   respawnPoint: {fileID: 0}
   lockPlayerDuringDialogue: 1
   chaseSpeed: 1.8
@@ -18673,4 +18776,5 @@ SceneRoots:
   - {fileID: 1223567693}
   - {fileID: 140234511}
   - {fileID: 884488096}
+  - {fileID: 422931051}
   - {fileID: 2112252813}

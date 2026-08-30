@@ -19,6 +19,7 @@ public class DoorInteraction : MonoBehaviour, IInteractable
 
     [Header("Break Open (optional)")]
     [SerializeField] private bool breakOpenFirstTime = false;
+    [SerializeField] private float breakOpenSpeed = 3f; // NEU: eigene Geschwindigkeit fürs Aufbrechen
     [SerializeField] private AudioClip breakOpenSound;
     [SerializeField][Range(0f, 1f)] private float breakOpenVolume = 1f;
 
@@ -194,20 +195,15 @@ public class DoorInteraction : MonoBehaviour, IInteractable
     {
         isMoving = true;
 
-        // Als aufgebrochen markieren
         hasBeenBrokenOpen = true;
 
         if (GameStateManager.Instance != null)
         {
-            GameStateManager.Instance.SetItemCollected(
-                doorId + "_broken"
-            );
+            GameStateManager.Instance.SetItemCollected(doorId + "_broken");
         }
 
-        // Aufbruch-Sound
         PlaySound(breakOpenSound, breakOpenVolume);
 
-        // Spind �ffnen
         Quaternion targetRotation = openRotation;
 
         while (Quaternion.Angle(transform.rotation, targetRotation) > 0.01f)
@@ -215,7 +211,7 @@ public class DoorInteraction : MonoBehaviour, IInteractable
             transform.rotation = Quaternion.Lerp(
                 transform.rotation,
                 targetRotation,
-                Time.deltaTime * openSpeed
+                Time.deltaTime * breakOpenSpeed // GEÄNDERT: breakOpenSpeed statt openSpeed
             );
 
             yield return null;
