@@ -105,3 +105,4 @@ public class GameStateManager : MonoBehaviour
         return triggeredVoiceTriggers.Contains(triggerId);
     }
 }
+

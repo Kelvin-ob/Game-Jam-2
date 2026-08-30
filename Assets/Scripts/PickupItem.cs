@@ -8,6 +8,8 @@ public class PickupItem : MonoBehaviour, IInteractable
     [TextArea(2, 5)]
     [SerializeField] private string promptText = "custom text";
 
+    [SerializeField] private VoiceTrigger keycardVoiceTrigger;
+
     [Header("Pickup Sound")]
     [SerializeField] private AudioClip pickupSound;
     [SerializeField][Range(0f, 1f)] private float pickupVolume = 1f;
@@ -29,19 +31,37 @@ public class PickupItem : MonoBehaviour, IInteractable
 
     public void Interact()
     {
-        // Item ins Inventar hinzufügen
+        // ==========================================
+        // ITEM INS INVENTAR HINZUFÜGEN
+        // ==========================================
+
         if (InventoryManager.Instance != null)
         {
             InventoryManager.Instance.AddItem(itemId);
         }
 
-        // Item als eingesammelt speichern
+        // ==========================================
+        // ITEM ALS EINGESAMMELT SPEICHERN
+        // ==========================================
+
         if (GameStateManager.Instance != null)
         {
             GameStateManager.Instance.SetItemCollected(itemId);
         }
 
-        // Sound abspielen
+        // ==========================================
+        // VOICE TRIGGER
+        // ==========================================
+
+        if (keycardVoiceTrigger != null)
+        {
+            keycardVoiceTrigger.TriggerVoice();
+        }
+
+        // ==========================================
+        // PICKUP SOUND
+        // ==========================================
+
         if (pickupSound != null)
         {
             AudioSource.PlayClipAtPoint(
@@ -51,18 +71,28 @@ public class PickupItem : MonoBehaviour, IInteractable
             );
         }
 
+        // ==========================================
+        // GUN AKTIVIEREN
+        // ==========================================
+
         if (gunToEnable != null)
         {
             gunToEnable.Pickup();
         }
 
-        // Prompt entfernen
+        // ==========================================
+        // PROMPT ENTFERNEN
+        // ==========================================
+
         if (InteractPromptManager.Instance != null)
         {
             InteractPromptManager.Instance.hidePrompt();
         }
 
-        // Item aus der Szene entfernen
+        // ==========================================
+        // ITEM AUS SZENE ENTFERNEN
+        // ==========================================
+
         Destroy(gameObject);
     }
 
