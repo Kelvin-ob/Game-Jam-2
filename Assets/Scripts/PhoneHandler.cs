@@ -25,14 +25,11 @@ public class PhoneHandler : MonoBehaviour, IInteractable
     private bool hasAnswered = false;
     private bool isRinging = false;
     private Coroutine ringRoutine;
-    private Player player;
 
     private void Start()
     {
         if (audioSource == null)
             audioSource = GetComponent<AudioSource>();
-
-        player = FindFirstObjectByType<Player>();
 
         TryStartRingingIfGeneratorActive();
     }
@@ -63,25 +60,13 @@ public class PhoneHandler : MonoBehaviour, IInteractable
         hasAnswered = true;
         StopRinging();
 
-        if (GameStateManager.Instance != null)
-        {
-            GameStateManager.Instance.SetItemCollected("phone_answered");
-        }
-
-        if (player != null)
-        {
-            player.SetMovementEnabled(false);
-        }
-
         if (npcVoiceManager == null)
         {
             Debug.LogWarning("NPCVoiceManager is missing for phone dialogue.");
-            if (player != null)
-                player.SetMovementEnabled(true);
             return;
         }
 
-        StartCoroutine(PlayPhoneDialogue());
+        npcVoiceManager.ShowDialogue(phoneDialogueLines);
     }
 
     public void OnFocus()
@@ -105,21 +90,6 @@ public class PhoneHandler : MonoBehaviour, IInteractable
             GameStateManager.Instance.IsGeneratorActivated(generatorId))
         {
             StartRinging();
-        }
-    }
-
-    private IEnumerator PlayPhoneDialogue()
-    {
-        if (npcVoiceManager == null)
-            yield break;
-
-        npcVoiceManager.ShowDialogue(phoneDialogueLines);
-
-        yield return new WaitUntil(() => !npcVoiceManager.IsVoiceActive);
-
-        if (player != null)
-        {
-            player.SetMovementEnabled(true);
         }
     }
 
