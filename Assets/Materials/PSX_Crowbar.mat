@@ -141,7 +141,7 @@ Material:
     - _AlphaMaskMode: 0
     - _AlphaToMask: 0
     - _Amplitude: 0
-    - _Attenuation: 0.35
+    - _Attenuation: 1
     - _Blend: 0
     - _BlendModePreserveSpecular: 1
     - _BumpScale: 1
