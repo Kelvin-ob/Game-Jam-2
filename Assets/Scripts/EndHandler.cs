@@ -48,12 +48,21 @@ public class EndHandler : MonoBehaviour, IInteractable
 
     public void OnFocus()
     {
+        if (hasTriggered)
+            return;
+
+        if (VoiceManager.Instance != null && VoiceManager.Instance.IsVoiceActive)
+            return;
+
         if (InteractPromptManager.Instance != null)
             InteractPromptManager.Instance.showPrompt(promptText);
     }
 
     public void OnLoseFocus()
     {
+        if (hasTriggered)
+            return;
+
         if (InteractPromptManager.Instance != null)
             InteractPromptManager.Instance.hidePrompt();
     }
