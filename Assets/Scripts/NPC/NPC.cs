@@ -61,6 +61,8 @@ public class NPC : MonoBehaviour
 
     [Header("Player")]
     [SerializeField] private Transform respawnPoint;
+    [SerializeField] private MonoBehaviour playerMovement;
+    [SerializeField] private float playerFreezeDuration;
 
     [Header("Chase")]
     [SerializeField] private float chaseSpeed = 5f;
@@ -69,6 +71,10 @@ public class NPC : MonoBehaviour
     [Header("Chase Dialogue")]
     [SerializeField] private string[] chaseDialogueLines;
     [SerializeField] private float[] chaseDialogueDelays;
+
+    [Header("After NPC's Death Dialogue")]
+    [SerializeField] private string[] afterDialogueLines;
+    [SerializeField] private float[] afterDialogueDelay;
 
     [Header("Health")]
     [SerializeField] private int health = 1;
@@ -149,6 +155,12 @@ public class NPC : MonoBehaviour
         currentState = EnemyState.Jumpscare;
         SetRunning(false);
 
+        if (playerMovement != null)
+        {
+            playerMovement.enabled = false;
+        }
+            
+
         if (agent != null)
         {
             agent.isStopped = true;
@@ -187,9 +199,17 @@ public class NPC : MonoBehaviour
 
         Debug.Log("JUMPSCARE!");
 
-        yield return new WaitForSeconds(jumpscareDuration);
-
         StartTalking();
+
+        yield return new WaitForSeconds(playerFreezeDuration);
+
+        if (playerMovement != null)
+        {
+            playerMovement.enabled = true;
+        }
+
+        
+            
     }
 
 
@@ -363,6 +383,8 @@ public class NPC : MonoBehaviour
 
         animator.SetBool("IsDead", true);
 
+        StartCoroutine(AfterDeathDialogue());
+
         if (agent != null)
         {
             agent.isStopped = true;
@@ -379,6 +401,20 @@ public class NPC : MonoBehaviour
             npcCollider.enabled = false;
 
         Debug.Log("Enemy ist tot!");
+    }
+
+    private IEnumerator AfterDeathDialogue()
+    {
+        for (int i = 0; i < afterDialogueLines.Length; i++)
+        {
+            float delay = (i < afterDialogueDelay.Length) ? afterDialogueDelay[i] : 3f;
+            yield return new WaitForSeconds(delay);
+
+            if (currentState != EnemyState.Dead)
+                yield break;
+
+            VoiceManager.Instance.ShowVoice(afterDialogueLines[i]);
+        }
     }
 
     // =========================================================
