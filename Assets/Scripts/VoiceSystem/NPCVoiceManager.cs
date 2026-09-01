@@ -9,7 +9,7 @@ public class NPCVoiceManager : MonoBehaviour
 
     [Header("Settings")]
     [SerializeField] private float typingSpeed = 0.05f;
-    [SerializeField] private float displayDuration = 3f;
+    [SerializeField] private float displayDuration = 2f;
     [SerializeField] private float timeBetweenLines = 0.5f;
 
     [Header("Typewriter Sound")]
