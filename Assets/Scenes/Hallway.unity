@@ -5461,19 +5461,15 @@ MonoBehaviour:
   triggerId: hallway_intro
   triggerOnce: 1
   dialogueLines:
-  - This is the Hallway.
-  - There used to be more action here...
-  - I am glad that we have each other.
-  - I will guide you.
   - We need to get to the Control Room.
-  - Just walk along the hall.
+  - 'It should be at the end of this hall. '
   typingSpeed: 0.05
-  displayDuration: 1.9
+  displayDuration: 1.5
   timeBetweenLines: 1
   requiredTriggers: []
   requiredItems: []
   player: {fileID: 1988015106}
-  lockMovement: 1
+  lockMovement: 0
 --- !u!4 &634476388
 Transform:
   m_ObjectHideFlags: 0
@@ -5782,7 +5778,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!65 &671917250
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -5818,11 +5814,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::VoiceTrigger
   triggerId: halfway_talk
   triggerOnce: 1
-  dialogueLines:
-  - We are almost there
-  - Can you see it?
-  - The red door.
-  - This is our destination.
+  dialogueLines: []
   typingSpeed: 0.05
   displayDuration: 1.9
   timeBetweenLines: 1
@@ -5830,7 +5822,7 @@ MonoBehaviour:
   - {fileID: 0}
   requiredItems: []
   player: {fileID: 1988015106}
-  lockMovement: 1
+  lockMovement: 0
 --- !u!4 &671917252
 Transform:
   m_ObjectHideFlags: 0
@@ -7046,6 +7038,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: e54db152345f2bb4486581b332c5f95d, type: 3}
       insertIndex: -1
       addedObject: {fileID: 2093375962}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: e54db152345f2bb4486581b332c5f95d, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2093375964}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: e54db152345f2bb4486581b332c5f95d, type: 3}
       insertIndex: -1
       addedObject: {fileID: 2093375956}
@@ -14979,8 +14974,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 9.041843, y: 1, z: 7.552246}
-  m_Center: {x: -0.28136635, y: 0, z: -0.26248932}
+  m_Size: {x: 6.7556763, y: 1, z: 7.552246}
+  m_Center: {x: 0.8617172, y: 0, z: -0.26248932}
 --- !u!114 &1681392831
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -17657,30 +17652,43 @@ MonoBehaviour:
   npcVoiceManager: {fileID: 565453617110359470}
   talkingDialogue:
   - isAI: 0
-    text: Hey man!
+    text: Where do you think you're going?!
   - isAI: 0
-    text: I finally found you.
-  - isAI: 1
-    text: This guy is not to be trusted.
-  - isAI: 1
-    text: He is dangerous
-  - isAI: 0
-    text: So...
-  - isAI: 0
-    text: Get OVER HEREEE!
+    text: 'Didn''t I tell you to stay put? '
   jumpscarePosition: {fileID: 6990275}
   jumpscareDuration: 2
   jumpscareMoveSpeed: 18
   impulseSource: {fileID: 2093375960}
   hitImpulseForce: {x: 0.2, y: 0.02, z: 0}
   audioSource: {fileID: 2093375962}
-  jumpscareSound: {fileID: 8300000, guid: e2b351d3ae7700c42a63596ac45a7d60, type: 3}
+  jumpscareSound: {fileID: 8300000, guid: 189d85c08bc7d4c4b8e4de5085aaf60e, type: 3}
   jumpscareVolume: 1
   musicAudioSource: {fileID: 2093375962}
-  chaseSound: {fileID: 8300000, guid: 56358ed1f8779e441abfec150fc23772, type: 3}
+  chaseTrack: {fileID: 8300000, guid: a65e9d2383369dc4eb67493e3b5a2d9f, type: 3}
+  shotgunAudioSource: {fileID: 2093375964}
+  shotgunSound: {fileID: 8300000, guid: 349536e1d8b4a564185eed1536fc61e9, type: 3}
+  shotgunVolume: 1
   respawnPoint: {fileID: 1988015102}
+  playerMovement: {fileID: 1988015106}
+  playerFreezeDuration: 5
   chaseSpeed: 1.8
   catchDistance: 1.5
+  chaseDialogueLines:
+  - RUN.
+  - Turn left
+  - At the end of this hall is an open door
+  - It is on the right, hurry!
+  chaseDialogueDelays:
+  - 1
+  - 7
+  - 5
+  - 4
+  afterDialogueLines:
+  - It had to be done.
+  - Let us go now.
+  afterDialogueDelay:
+  - 3
+  - 4
   health: 1
   sceneToLoad: DeathScene
 --- !u!136 &2093375958
@@ -17772,6 +17780,103 @@ AudioSource:
   m_audioClip: {fileID: 0}
   m_Resource: {fileID: 0}
   m_PlayOnAwake: 1
+  m_Volume: 1
+  m_Pitch: 1
+  Loop: 0
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+--- !u!82 &2093375964
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2093375953}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 0}
+  m_audioClip: {fileID: 0}
+  m_Resource: {fileID: 0}
+  m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1
   Loop: 0
@@ -18614,7 +18719,7 @@ PrefabInstance:
       objectReference: {fileID: 7843402134245377346}
     - target: {fileID: 8588244371101761647, guid: f79d5a7a70064204b92a00f87964e29a, type: 3}
       propertyPath: displayDuration
-      value: 1.7
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8588244371101761647, guid: f79d5a7a70064204b92a00f87964e29a, type: 3}
       propertyPath: typewriterAudio
