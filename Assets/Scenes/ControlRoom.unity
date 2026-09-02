@@ -1867,6 +1867,17 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8585df512dabdea4c874ea5b03b21516, type: 3}
+--- !u!114 &263847420 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3217253709247912554, guid: b0a11d9c60468904ca13793ce4a8c70a, type: 3}
+  m_PrefabInstance: {fileID: 1929538609}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshProUGUI
 --- !u!4 &266722819 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3814766309579640228, guid: 0083f5ab0585b7d4b9809752b40f0360, type: 3}
@@ -2827,7 +2838,7 @@ GameObject:
   - component: {fileID: 469920599}
   - component: {fileID: 469920598}
   - component: {fileID: 469920597}
-  - component: {fileID: 469920596}
+  - component: {fileID: 469920601}
   m_Layer: 0
   m_Name: Cube
   m_TagString: Untagged
@@ -2835,42 +2846,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!328 &469920596
-VideoPlayer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 469920595}
-  m_Enabled: 1
-  m_VideoClip: {fileID: 32900000, guid: f3c389d099f34ce4f866db32e70eecfd, type: 3}
-  m_TargetCameraAlpha: 1
-  m_TargetCamera3DLayout: 0
-  m_TargetCamera: {fileID: 0}
-  m_TargetTexture: {fileID: 8400000, guid: a497bc47f5872764093a1287318a6313, type: 2}
-  m_TimeReference: 0
-  m_TargetMaterialRenderer: {fileID: 0}
-  m_TargetMaterialProperty: <noninit>
-  m_RenderMode: 2
-  m_AspectRatio: 2
-  m_DataSource: 0
-  m_TimeUpdateMode: 2
-  m_PlaybackSpeed: 1.35
-  m_AudioOutputMode: 2
-  m_TargetAudioSources:
-  - {fileID: 0}
-  m_DirectAudioVolumes:
-  - 1
-  m_Url: 
-  m_EnabledAudioTracks: 01
-  m_DirectAudioMutes: 00
-  m_ControlledAudioTrackCount: 1
-  m_PlayOnAwake: 1
-  m_SkipOnDrop: 1
-  m_Looping: 1
-  m_WaitForFirstFrame: 1
-  m_FrameReadyEventEnabled: 0
-  m_VideoShaders: []
 --- !u!65 &469920597
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -2917,7 +2892,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 96f4daae5ed800f4abbf734ddc5acb92, type: 2}
+  - {fileID: 2100000, guid: 1f8be41707e755e428bf49b422d533a2, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -2957,13 +2932,49 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 469920595}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: 3.9492676e-10, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -3.3}
+  m_LocalRotation: {x: 0, y: 0, z: 1, w: 0}
+  m_LocalPosition: {x: 0.000000033765897, y: 0.000000014821955, z: -3.3000035}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 2110306131}
-  m_LocalEulerAnglesHint: {x: -0.15, y: -0.007, z: 1.713}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 180}
+--- !u!328 &469920601
+VideoPlayer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 469920595}
+  m_Enabled: 1
+  m_VideoClip: {fileID: 32900000, guid: efb6b72653175b942a6969839c282c5f, type: 3}
+  m_TargetCameraAlpha: 1
+  m_TargetCamera3DLayout: 0
+  m_TargetCamera: {fileID: 0}
+  m_TargetTexture: {fileID: 8400000, guid: 56fa6ac053ffb2447878cc08d7f89ae6, type: 2}
+  m_TimeReference: 0
+  m_TargetMaterialRenderer: {fileID: 0}
+  m_TargetMaterialProperty: <noninit>
+  m_RenderMode: 2
+  m_AspectRatio: 2
+  m_DataSource: 0
+  m_TimeUpdateMode: 2
+  m_PlaybackSpeed: 0.8
+  m_AudioOutputMode: 2
+  m_TargetAudioSources:
+  - {fileID: 0}
+  m_DirectAudioVolumes:
+  - 1
+  m_Url: 
+  m_EnabledAudioTracks: 01
+  m_DirectAudioMutes: 00
+  m_ControlledAudioTrackCount: 1
+  m_PlayOnAwake: 1
+  m_SkipOnDrop: 1
+  m_Looping: 1
+  m_WaitForFirstFrame: 1
+  m_FrameReadyEventEnabled: 0
+  m_VideoShaders: []
 --- !u!1001 &475269561
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3135,6 +3146,17 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8585df512dabdea4c874ea5b03b21516, type: 3}
+--- !u!114 &500092670 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2851297891239948222, guid: d79c856ee7034574eb2a7a6291727321, type: 3}
+  m_PrefabInstance: {fileID: 1101296340}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
 --- !u!1001 &505038573
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -5527,7 +5549,7 @@ PrefabInstance:
     - target: {fileID: 393926705572868134, guid: 69d32f28f31621049b76150cd58b9edb, type: 3}
       propertyPath: voiceText
       value: 
-      objectReference: {fileID: 2001571957}
+      objectReference: {fileID: 263847420}
     - target: {fileID: 735632056612748436, guid: 69d32f28f31621049b76150cd58b9edb, type: 3}
       propertyPath: m_Name
       value: 'VoiceManager '
@@ -9657,6 +9679,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b40ec6715ff25c944800ebd21d0218c2, type: 3}
+--- !u!1 &1349586693 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3156296150421116394, guid: d79c856ee7034574eb2a7a6291727321, type: 3}
+  m_PrefabInstance: {fileID: 1101296340}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1352012705
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -14711,7 +14738,12 @@ MonoBehaviour:
   displayDuration: 3
   timeBetweenLines: 1
   promptText: Access Terminal
+  activationDuration: 3
   triggerOnce: 1
+  progressUI: {fileID: 1349586693}
+  progressCircle: {fileID: 500092670}
+  activateSound: {fileID: 8300000, guid: e487a78d2caad234e8e6d74bf7a2ce56, type: 3}
+  activateVolume: 1
 --- !u!82 &2110306133
 AudioSource:
   m_ObjectHideFlags: 0
