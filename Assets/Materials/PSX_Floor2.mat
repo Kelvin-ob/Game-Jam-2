@@ -152,7 +152,7 @@ Material:
     - _ColorPrecisionToggle: 1
     - _ComparisonMode: 0
     - _Cull: 2
-    - _CullMode: 0
+    - _CullMode: 2
     - _CustomLightDirectionToggle: 0
     - _Cutoff: 0.5
     - _DetailAlbedoMapScale: 1
