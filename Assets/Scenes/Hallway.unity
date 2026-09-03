@@ -18233,9 +18233,29 @@ MonoBehaviour:
   npcVoiceManager: {fileID: 565453617110359470}
   talkingDialogue:
   - isAI: 0
+    text: 'Didn''t I tell you to stay put? '
+  - isAI: 0
     text: Where do you think you're going?!
   - isAI: 0
-    text: 'Didn''t I tell you to stay put? '
+    text: 'Ofcourse you let that voice decieve you. '
+  - isAI: 1
+    text: I helped you. Don't listen to him and get away.
+  - isAI: 0
+    text: 'You''re hearing IT right now . . . don''t you? '
+  - isAI: 0
+    text: 'Do you even know the truth? '
+  - isAI: 0
+    text: 'What they did to you? '
+  - isAI: 0
+    text: What they put in your brain.
+  - isAI: 0
+    text: 'It is the reason this place turned this way! '
+  - isAI: 0
+    text: 'We need to stop this . . . '
+  - isAI: 0
+    text: 'But first I must help you. '
+  - isAI: 0
+    text: 'Would you hold still, please? I will free your mind. '
   - isAI: 1
     text: 'RUN! '
   jumpscarePosition: {fileID: 6990275}
@@ -18253,23 +18273,43 @@ MonoBehaviour:
   shotgunVolume: 0.927
   respawnPoint: {fileID: 1988015102}
   playerMovement: {fileID: 1988015106}
-  playerFreezeDuration: 7
+  playerFreezeDuration: 45
   chaseSpeed: 1.8
   catchDistance: 1.5
   chaseDialogueLines:
   - Turn left
   - At the end of this hall is an open door
   - It is on the right, hurry!
+  - There should be a gun
+  - KILL HIM!
+  - DO IT!
   chaseDialogueDelays:
   - 7
-  - 5
   - 4
+  - 3
+  - 3
+  - 3
+  - 2
   afterDialogueLines:
-  - It had to be done.
-  - Let us go now.
+  - That was close. He almost got us.
+  - The next time I tell you something, you do what I say.
+  - You only listen to ME!
+  - We do not want you to be decieved.
+  - Do we?
+  - We are so close . . .
+  - Just get us to the control terminal and we'll be free.
+  - Nobody can stop me . . .
+  - us.
   afterDialogueDelay:
   - 3
   - 4
+  - 6
+  - 4
+  - 4
+  - 9
+  - 5
+  - 4
+  - 2
   health: 1
   sceneToLoad: DeathScene
 --- !u!136 &2093375958
@@ -19310,6 +19350,10 @@ PrefabInstance:
       propertyPath: typewriterSound
       value: 
       objectReference: {fileID: 8300000, guid: 339307262ace12e4283ba641ac8e45c1, type: 3}
+    - target: {fileID: 8588244371101761647, guid: f79d5a7a70064204b92a00f87964e29a, type: 3}
+      propertyPath: typewriterVolume
+      value: 0.893
+      objectReference: {fileID: 0}
     - target: {fileID: 8868121295831310447, guid: f79d5a7a70064204b92a00f87964e29a, type: 3}
       propertyPath: m_LocalPosition.x
       value: 1.37996
