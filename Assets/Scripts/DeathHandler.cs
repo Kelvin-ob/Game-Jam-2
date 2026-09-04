@@ -41,6 +41,16 @@ public class DeathHandler : MonoBehaviour
             yield break;
         }
 
+        if (GameStateManager.Instance != null)
+        {
+            GameStateManager.Instance.ClearItemCollected("gun");
+        }
+
+        if (InventoryManager.Instance != null)
+        {
+            InventoryManager.Instance.RemoveItem("gun");
+        }
+
         SceneFader sceneFader = FindFirstObjectByType<SceneFader>();
 
         if (sceneFader != null)

@@ -55,6 +55,8 @@ public class NPC : MonoBehaviour
     [Header("NPC getting Shot")]
     [SerializeField] private AudioSource shotgunAudioSource;
     [SerializeField] private AudioClip shotgunSound;
+    [SerializeField] private GunHandler shotgun;
+
     [SerializeField][Range(0f, 1f)] private float shotgunVolume = 1f;
     
 
@@ -228,7 +230,7 @@ public class NPC : MonoBehaviour
         StartCoroutine(TalkingSequence()); // GEÄNDERT: statt Invoke
     }
 
-    private System.Collections.IEnumerator TalkingSequence()
+    private IEnumerator TalkingSequence()
     {
         foreach (DialogueLine line in talkingDialogue)
         {
@@ -336,6 +338,7 @@ public class NPC : MonoBehaviour
 
         Debug.Log("Spieler wurde erwischt!");
 
+        shotgun.SetIsPickedUp(false);
         changeScene();
         openDoor = false;
     }

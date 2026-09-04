@@ -20,10 +20,6 @@ public class PickupItem : MonoBehaviour, IInteractable
         if (GameStateManager.Instance != null &&
             GameStateManager.Instance.IsItemCollected(itemId))
         {
-            if (gunToEnable != null)
-            {
-                gunToEnable.Pickup();
-            }
 
             Destroy(gameObject);
         }

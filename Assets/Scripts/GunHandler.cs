@@ -16,6 +16,7 @@ public class GunHandler : MonoBehaviour
     private void Awake()
     {
         renderers = GetComponentsInChildren<Renderer>(true);
+        isPickedUp = false;
         SetWeaponVisible(false);
         enabled = false;
     }
@@ -40,6 +41,11 @@ public class GunHandler : MonoBehaviour
         if (Mouse.current != null && Mouse.current.leftButton.wasPressedThisFrame)
         {
             Shoot();
+        }
+        if (!isPickedUp)
+        {
+            SetWeaponVisible(false);
+            enabled = false;
         }
     }
 
@@ -88,5 +94,15 @@ public class GunHandler : MonoBehaviour
                 renderer.enabled = visible;
             }
         }
+    }
+
+    public bool GetIsPickedUp()
+    {
+        return isPickedUp;
+    }
+
+    public void SetIsPickedUp(bool newisPickedUp)
+    {
+        isPickedUp = newisPickedUp;
     }
 }

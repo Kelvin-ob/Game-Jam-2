@@ -57,7 +57,7 @@ Material:
     - _Emission: 0
     - _Extra_Noise: 0
     - _Extra_Noise_Density: 5
-    - _Fade_distence: 0.501
+    - _Fade_distence: 0.4
     - _Metalic: 0
     - _Nois_A_Scale: 0.02
     - _Nois_B_Scale: 0.01
