@@ -8,6 +8,7 @@ public class PhoneHandler : MonoBehaviour, IInteractable
 
     [Header("Dialogue")]
     [SerializeField] private NPCVoiceManager npcVoiceManager;
+    [SerializeField] private Player player; 
     [TextArea(2, 5)]
     [SerializeField] private string[] phoneDialogueLines;
     [SerializeField] private float typingSpeed = 0.05f;
@@ -66,7 +67,25 @@ public class PhoneHandler : MonoBehaviour, IInteractable
             return;
         }
 
+        StartCoroutine(PlayPhoneDialogueRoutine());
+    }
+
+    private IEnumerator PlayPhoneDialogueRoutine()
+    {
+        if (player != null)
+        {
+            player.SetMovementEnabled(false);
+        }
+
         npcVoiceManager.ShowDialogue(phoneDialogueLines);
+
+        // warten, bis der Dialog fertig ist
+        yield return new WaitUntil(() => !npcVoiceManager.IsVoiceActive);
+
+        if (player != null)
+        {
+            player.SetMovementEnabled(true);
+        }
     }
 
     public void OnFocus()

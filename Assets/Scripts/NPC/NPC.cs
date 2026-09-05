@@ -1,6 +1,8 @@
+using System.Collections;
 using Unity.Cinemachine;
 using UnityEngine;
 using UnityEngine.AI;
+using static UnityEngine.Rendering.DebugUI;
 
 public class NPC : MonoBehaviour
 {
@@ -19,6 +21,18 @@ public class NPC : MonoBehaviour
     [SerializeField] private Animator animator;
     public bool openDoor;
 
+    [System.Serializable]
+    public class DialogueLine
+    {
+        public bool isAI; // true = VoiceManager (AI im Kopf), false = NPCVoiceManager (echte Person)
+        [TextArea(2, 4)]
+        public string text;
+    }
+
+    [Header("Talking")]
+    [SerializeField] private NPCVoiceManager npcVoiceManager; // NEU: Referenz
+    [SerializeField] private DialogueLine[] talkingDialogue; // NEU: abwechselnde Zeilen
+
 
 
     [Header("Jumpscare")]
@@ -29,15 +43,45 @@ public class NPC : MonoBehaviour
     [SerializeField] private CinemachineImpulseSource impulseSource;
     [SerializeField] private Vector3 hitImpulseForce = new Vector3(1f, 1f, 0f);
 
+    [Header("Jumpscare Sound")]
+    [SerializeField] private AudioSource audioSource;
+    [SerializeField] private AudioClip jumpscareSound;
+    [SerializeField][Range(0f, 2f)] private float jumpscareVolume = 1f;
+
+    [Header("Chase Scene")]
+    [SerializeField] private AudioSource musicAudioSource;
+    [SerializeField] private AudioClip chaseTrack; // Chase Scene Track
+
+    [Header("NPC getting Shot")]
+    [SerializeField] private AudioSource shotgunAudioSource;
+    [SerializeField] private AudioClip shotgunSound;
+    [SerializeField] private GunHandler shotgun;
+
+    [SerializeField][Range(0f, 1f)] private float shotgunVolume = 1f;
+    
+
+
     [Header("Player")]
     [SerializeField] private Transform respawnPoint;
+    [SerializeField] private MonoBehaviour playerMovement;
+    [SerializeField] private float playerFreezeDuration;
 
     [Header("Chase")]
     [SerializeField] private float chaseSpeed = 5f;
     [SerializeField] private float catchDistance = 1.5f;
 
+    [Header("Chase Dialogue")]
+    [SerializeField] private string[] chaseDialogueLines;
+    [SerializeField] private float[] chaseDialogueDelays;
+
+    [Header("After NPC's Death Dialogue")]
+    [SerializeField] private string[] afterDialogueLines;
+    [SerializeField] private float[] afterDialogueDelay;
+
     [Header("Health")]
     [SerializeField] private int health = 1;
+
+
 
     [SerializeField] private string sceneToLoad = "";
 
@@ -113,6 +157,12 @@ public class NPC : MonoBehaviour
         currentState = EnemyState.Jumpscare;
         SetRunning(false);
 
+        if (playerMovement != null)
+        {
+            playerMovement.enabled = false;
+        }
+            
+
         if (agent != null)
         {
             agent.isStopped = true;
@@ -140,14 +190,28 @@ public class NPC : MonoBehaviour
                 agent.Warp(jumpscarePosition.position);
         }
         if (impulseSource != null)
-            {
+        {
                 impulseSource.GenerateImpulse(hitImpulseForce);
-            }
+        }
+
+        if (audioSource != null && jumpscareSound != null)
+        {
+            audioSource.PlayOneShot(jumpscareSound, jumpscareVolume);
+        }
+
         Debug.Log("JUMPSCARE!");
 
-        yield return new WaitForSeconds(jumpscareDuration);
-
         StartTalking();
+
+        yield return new WaitForSeconds(playerFreezeDuration);
+
+        if (playerMovement != null)
+        {
+            playerMovement.enabled = true;
+        }
+
+        
+            
     }
 
 
@@ -158,16 +222,34 @@ public class NPC : MonoBehaviour
     private void StartTalking()
     {
         currentState = EnemyState.Talking;
-
         SetRunning(false);
-
         agent.isStopped = true;
 
         Debug.Log("Enemy beginnt zu reden.");
 
-        // TEMPORÄR:
-        // Später hier dein Voice-/Dialogue-System aufrufen.
-        Invoke(nameof(StartChase), 3f);
+        StartCoroutine(TalkingSequence()); // GEÄNDERT: statt Invoke
+    }
+
+    private IEnumerator TalkingSequence()
+    {
+        foreach (DialogueLine line in talkingDialogue)
+        {
+            if (string.IsNullOrWhiteSpace(line.text))
+                continue;
+
+            if (line.isAI)
+            {
+                VoiceManager.Instance.ShowVoice(line.text);
+                yield return new WaitUntil(() => !VoiceManager.Instance.IsVoiceActive);
+            }
+            else
+            {
+                npcVoiceManager.ShowDialogue(new string[] { line.text });
+                yield return new WaitUntil(() => !npcVoiceManager.IsVoiceActive);
+            }
+        }
+
+        StartChase();
     }
 
 
@@ -184,13 +266,43 @@ public class NPC : MonoBehaviour
 
         currentState = EnemyState.Chasing;
 
-        agent.isStopped = false;
-        agent.speed = chaseSpeed;
+        if (agent != null)
+        {
+            agent.enabled = true;
+            agent.isStopped = false;
+            agent.speed = chaseSpeed;
+        }
 
         SetRunning(true);
         openDoor = true;
 
+        if (audioSource != null && chaseTrack != null)
+        {
+            musicAudioSource.clip = chaseTrack;
+            musicAudioSource.loop = true;
+            musicAudioSource.Play();
+        }
+
+        StartCoroutine(ChaseDialogueSequence());
+
         Debug.Log("CHASE START!");
+
+
+        
+    }
+
+    private IEnumerator ChaseDialogueSequence()
+    {
+        for (int i = 0; i < chaseDialogueDelays.Length; i++)
+        {
+            float delay = (i < chaseDialogueDelays.Length) ? chaseDialogueDelays[i] : 3f;
+            yield return new WaitForSeconds(delay);
+
+            if (currentState != EnemyState.Chasing)
+                yield break;
+
+            VoiceManager.Instance.ShowVoice(chaseDialogueLines[i]);
+        }
     }
 
 
@@ -226,6 +338,7 @@ public class NPC : MonoBehaviour
 
         Debug.Log("Spieler wurde erwischt!");
 
+        shotgun.SetIsPickedUp(false);
         changeScene();
         openDoor = false;
     }
@@ -261,7 +374,19 @@ public class NPC : MonoBehaviour
 
         currentState = EnemyState.Dead;
 
+        if (shotgunAudioSource != null && shotgunSound != null)
+        {
+            shotgunAudioSource.PlayOneShot(shotgunSound, shotgunVolume);
+        }
+
+        if (musicAudioSource != null)
+        {
+            musicAudioSource.Stop();
+        }
+
         animator.SetBool("IsDead", true);
+
+        StartCoroutine(AfterDeathDialogue());
 
         if (agent != null)
         {
@@ -279,6 +404,20 @@ public class NPC : MonoBehaviour
             npcCollider.enabled = false;
 
         Debug.Log("Enemy ist tot!");
+    }
+
+    private IEnumerator AfterDeathDialogue()
+    {
+        for (int i = 0; i < afterDialogueLines.Length; i++)
+        {
+            float delay = (i < afterDialogueDelay.Length) ? afterDialogueDelay[i] : 3f;
+            yield return new WaitForSeconds(delay);
+
+            if (currentState != EnemyState.Dead)
+                yield break;
+
+            VoiceManager.Instance.ShowVoice(afterDialogueLines[i]);
+        }
     }
 
     // =========================================================

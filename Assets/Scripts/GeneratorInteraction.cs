@@ -283,6 +283,9 @@ public class GeneratorInteraction : MonoBehaviour, IInteractable
 
         // Generator NOCH NICHT anschalten
         InteractPromptManager.Instance.showPrompt(activateText);
+
+        string[] endDialogue = { "Well done.", "Turn it on and go back to the vent." };
+        VoiceManager.Instance.StartPickupDialogue(endDialogue, 0.5f, 0.05f, 1.5f, 0.5f);
     }
 
     private void ActivateGenerator()

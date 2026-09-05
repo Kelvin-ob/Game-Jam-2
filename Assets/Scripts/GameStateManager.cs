@@ -39,6 +39,11 @@ public class GameStateManager : MonoBehaviour
         return collectedItems.Contains(itemId);
     }
 
+    public void ClearItemCollected(string itemId)
+    {
+        collectedItems.Remove(itemId);
+    }
+
     // =========================
     // DOORS
     // =========================
