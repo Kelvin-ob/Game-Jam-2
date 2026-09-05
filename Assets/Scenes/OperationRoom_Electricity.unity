@@ -3165,8 +3165,8 @@ MonoBehaviour:
   displayDuration: 3
   timeBetweenLines: 0.5
   typewriterAudio: {fileID: 461573940}
-  typewriterSound: {fileID: 8300000, guid: aee5400a8353cd74a9d00dfb23a5350a, type: 3}
-  typewriterVolume: 0.5
+  typewriterSound: {fileID: 8300000, guid: de73eb05ff4444544b36ce497ed662f2, type: 3}
+  typewriterVolume: 1
 --- !u!1 &596906168
 GameObject:
   m_ObjectHideFlags: 0
