@@ -6,6 +6,8 @@ public class GameInput : MonoBehaviour
     private InputSystem_Actions inputActions;
     private bool isSprinting;
     private bool isCrouching;
+    private bool isEscaped;
+
 
     void Awake()
     {
@@ -49,6 +51,11 @@ public class GameInput : MonoBehaviour
     {
         Vector2 mouseVector = inputActions.Player.Look.ReadValue<Vector2>();
         return mouseVector;
+    }
+    public bool getIsEscaped()
+    {
+        isEscaped = inputActions.Player.Esc.IsPressed();
+        return isEscaped;
     }
 
 }

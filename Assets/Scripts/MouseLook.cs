@@ -6,15 +6,22 @@ public class MouseLook : MonoBehaviour
     [SerializeField] private float mouseSens = 10f;
     [SerializeField] private Transform playerBody;
     [SerializeField] private GameInput gameInput;
+    [SerializeField] private bool canLook;
+
     private float xRotation = 0f;
 
     void Start()
     {
         Cursor.lockState = CursorLockMode.Locked;
+        canLook = true;
     }
 
     void Update()
     {
+        if (!canLook)
+        {
+            return;
+        }
         Vector2 mouseVector = gameInput.GetMousePos();
         float mouseX = mouseVector.x * mouseSens * Time.deltaTime;
         float mouseY = mouseVector.y * mouseSens * Time.deltaTime;
@@ -38,5 +45,9 @@ public class MouseLook : MonoBehaviour
         transform.localPosition = pos;
     }
 
+    public void SetCanLook(bool newcanLook)
+    {
+        canLook = newcanLook;
+    }
 
 }
