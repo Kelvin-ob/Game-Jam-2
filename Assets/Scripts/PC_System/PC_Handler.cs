@@ -13,26 +13,19 @@ public class PC_Handler : MonoBehaviour, IInteractable
     [SerializeField] private MouseLook mouseLook;
     [SerializeField] private GameObject crosshair;
 
-    [Header("Computer UI")]
-    [SerializeField] private GameObject computerUI;
-    [SerializeField] private PCUIFade pcUIFade;
-
     [Header("Camera")]
     [SerializeField] private float cameraWaitTime = 0.5f;
 
     [SerializeField] private bool onComputer;
-    private bool isTransitioning;
 
     private void Start()
     {
         onComputer = false;
-        isTransitioning = false;
-        computerUI.SetActive(false);
     }
 
     private void Update()
     {
-        if (onComputer && !isTransitioning && gameInput.getIsEscaped())
+        if (onComputer && gameInput.getIsEscaped())
         {
             ExitComputer();
         }
@@ -40,11 +33,7 @@ public class PC_Handler : MonoBehaviour, IInteractable
 
     public void Interact()
     {
-        if (onComputer || isTransitioning)
-            return;
-
         onComputer = true;
-        isTransitioning = true;
 
         // Kamera zum PC wechseln
         CameraManager.SwitchCamera(pc_cam);
@@ -53,40 +42,19 @@ public class PC_Handler : MonoBehaviour, IInteractable
         player.SetMovementEnabled(false);
         mouseLook.SetCanLook(false);
 
-        // Maus anzeigen
+        // Maus aktivieren
         Cursor.lockState = CursorLockMode.Confined;
         Cursor.visible = true;
 
         // Andere UI ausblenden
         InteractPromptManager.Instance.hidePrompt();
         crosshair.SetActive(false);
-
-        // Computer UI erst nach dem Kamera-Zoom öffnen
-        StartCoroutine(OpenComputer());
     }
 
-    private IEnumerator OpenComputer()
-    {
-        // Warten, bis die Kamera am PC angekommen ist
-        yield return new WaitForSeconds(cameraWaitTime);
-
-        // UI aktivieren
-        computerUI.SetActive(true);
-        pcUIFade.SetInteractionEnabled(false);
-
-        // UI langsam einblenden
-        pcUIFade.ShowUI();
-        yield return new WaitForSeconds(pcUIFade.FadeDuration);
-        pcUIFade.SetInteractionEnabled(true);
-        isTransitioning = false;
-    }
 
     public void OnFocus()
     {
-        if (!onComputer)
-        {
-            InteractPromptManager.Instance.showPrompt(promptText);
-        }
+        InteractPromptManager.Instance.showPrompt(promptText);
     }
 
     public void OnLoseFocus()
@@ -96,28 +64,8 @@ public class PC_Handler : MonoBehaviour, IInteractable
 
     private void ExitComputer()
     {
-        if (!onComputer || isTransitioning)
-            return;
-
+        // Eventuelle Coroutine stoppen
         StopAllCoroutines();
-
-        StartCoroutine(CloseComputer());
-    }
-
-    private IEnumerator CloseComputer()
-    {
-        isTransitioning = true;
-        pcUIFade.SetInteractionEnabled(false);
-
-        // UI langsam ausblenden
-        pcUIFade.HideUI();
-
-        // Warten, bis Fade-Out fertig ist
-        yield return new WaitForSeconds(pcUIFade.FadeDuration);
-
-        // UI deaktivieren
-        computerUI.SetActive(false);
-
         // Zurück zur FPS-Kamera
         CameraManager.SwitchCamera(fps_cam);
 
@@ -135,7 +83,5 @@ public class PC_Handler : MonoBehaviour, IInteractable
         // Interaktions-Prompt wieder anzeigen
         InteractPromptManager.Instance.showPrompt(promptText);
 
-        onComputer = false;
-        isTransitioning = false;
     }
 }
