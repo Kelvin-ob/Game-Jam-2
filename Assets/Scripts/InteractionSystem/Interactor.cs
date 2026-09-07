@@ -14,7 +14,7 @@ public class Interactor : MonoBehaviour
 {
     public Transform InteractorSource;
     [SerializeField] public float InteractRange;
-    [SerializeField] private Image crosshairImage; // GEÄNDERT: nur noch ein Image statt 2 GameObjects
+    [SerializeField] private Image crosshairImage; // GEï¿½NDERT: nur noch ein Image statt 2 GameObjects
 
     [Header("Crosshair Colors")]
     [SerializeField] private Color normalColor = Color.white;
@@ -50,7 +50,6 @@ public class Interactor : MonoBehaviour
             currentInteractable?.OnFocus();
         }
 
-        Debug.Log("Fokus: " + (currentInteractable != null) + " | Farbe wird gesetzt auf: " + (currentInteractable != null ? focusColor : normalColor));
 
         crosshairImage.color = currentInteractable != null ? focusColor : normalColor;
 

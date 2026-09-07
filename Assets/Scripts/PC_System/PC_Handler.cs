@@ -84,4 +84,9 @@ public class PC_Handler : MonoBehaviour, IInteractable
         InteractPromptManager.Instance.showPrompt(promptText);
 
     }
+
+    public void TestButton()
+    {
+        Debug.Log("BUTTON FUNKTIONIERT!");
+    }
 }

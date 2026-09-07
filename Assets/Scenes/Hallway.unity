@@ -16258,6 +16258,7 @@ MonoBehaviour:
   mouseSens: 6
   playerBody: {fileID: 1988015102}
   gameInput: {fileID: 1629491058}
+  canLook: 0
 --- !u!114 &1259061821
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -26496,6 +26497,7 @@ MonoBehaviour:
 SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
+  - {fileID: 1333239443}
   - {fileID: 242005366}
   - {fileID: 90342960}
   - {fileID: 565453617110359469}
@@ -26507,7 +26509,6 @@ SceneRoots:
   - {fileID: 5180652815875064753}
   - {fileID: 1074886398}
   - {fileID: 1567244537}
-  - {fileID: 1333239443}
   - {fileID: 1284849086}
   - {fileID: 1467562632}
   - {fileID: 1651468526}
