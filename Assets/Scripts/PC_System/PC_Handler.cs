@@ -12,6 +12,8 @@ public class PC_Handler : MonoBehaviour, IInteractable
     [SerializeField] private GameInput gameInput;
     [SerializeField] private MouseLook mouseLook;
     [SerializeField] private GameObject crosshair;
+    [SerializeField] private PC_UI_Manager uiManager;
+
 
     [Header("Camera")]
     [SerializeField] private float cameraWaitTime = 0.5f;
@@ -21,6 +23,8 @@ public class PC_Handler : MonoBehaviour, IInteractable
     private void Start()
     {
         onComputer = false;
+        uiManager.hideDesktop();
+        uiManager.hideLogin();
     }
 
     private void Update()
@@ -34,6 +38,10 @@ public class PC_Handler : MonoBehaviour, IInteractable
     public void Interact()
     {
         onComputer = true;
+
+        uiManager.showLogin();
+        uiManager.setLoggedIn(true);
+
 
         // Kamera zum PC wechseln
         CameraManager.SwitchCamera(pc_cam);
@@ -82,7 +90,7 @@ public class PC_Handler : MonoBehaviour, IInteractable
 
         // Interaktions-Prompt wieder anzeigen
         InteractPromptManager.Instance.showPrompt(promptText);
-
+        onComputer = false;
     }
 
     public void TestButton()

@@ -1339,6 +1339,7 @@ MonoBehaviour:
   mouseSens: 6
   playerBody: {fileID: 1553111416}
   gameInput: {fileID: 799523750}
+  canLook: 0
 --- !u!114 &216997053
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7275,7 +7276,7 @@ Camera:
     serializedVersion: 2
     m_Bits: 4294967295
   m_RenderingPath: -1
-  m_TargetTexture: {fileID: 8400000, guid: 0fbd95f7af60a5340bf4d619a41afde9, type: 2}
+  m_TargetTexture: {fileID: 0}
   m_TargetDisplay: 0
   m_TargetEye: 3
   m_HDR: 1
@@ -9622,7 +9623,8 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
-    m_RemovedGameObjects: []
+    m_RemovedGameObjects:
+    - {fileID: 6877141275655090414, guid: b0a11d9c60468904ca13793ce4a8c70a, type: 3}
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b0a11d9c60468904ca13793ce4a8c70a, type: 3}
