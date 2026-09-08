@@ -27,6 +27,7 @@ public class LoginHandler : MonoBehaviour
         {
             uiManager.hideLogin();
             uiManager.showDesktop();
+            uiManager.setLoggedIn(true);
         }
         if (username != correctUsername)
         {

@@ -40,8 +40,6 @@ public class PC_Handler : MonoBehaviour, IInteractable
         onComputer = true;
 
         uiManager.showLogin();
-        uiManager.setLoggedIn(true);
-
 
         // Kamera zum PC wechseln
         CameraManager.SwitchCamera(pc_cam);
