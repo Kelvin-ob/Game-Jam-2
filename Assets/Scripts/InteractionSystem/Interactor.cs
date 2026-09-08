@@ -1,7 +1,7 @@
 using DialogueEditor;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.UI; // NEU
+using UnityEngine.UI; 
 
 interface IInteractable
 {
@@ -25,6 +25,11 @@ public class Interactor : MonoBehaviour
     void Update()
     {
         if (ConversationManager.Instance != null && ConversationManager.Instance.IsConversationActive)
+        {
+            return;
+        }
+
+        if (NoteManager.Instance != null && (NoteManager.Instance.IsNoteOpen || Time.time < NoteManager.Instance.CloseCooldownUntil))
         {
             return;
         }
