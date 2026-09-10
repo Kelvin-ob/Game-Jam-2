@@ -287,7 +287,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Unity.Cinemachine::Unity.Cinemachine.CinemachineCamera
   Priority:
-    Enabled: 1
+    Enabled: 0
     m_Value: 0
   OutputChannel: 1
   StandbyUpdate: 2
@@ -6889,7 +6889,7 @@ VideoPlayer:
   m_ControlledAudioTrackCount: 1
   m_PlayOnAwake: 1
   m_SkipOnDrop: 1
-  m_Looping: 0
+  m_Looping: 1
   m_WaitForFirstFrame: 1
   m_FrameReadyEventEnabled: 0
   m_VideoShaders: []
@@ -9391,6 +9391,7 @@ GameObject:
   - component: {fileID: 1553222847}
   - component: {fileID: 1553222846}
   - component: {fileID: 1553222851}
+  - component: {fileID: 1553222852}
   m_Layer: 0
   m_Name: Main
   m_TagString: MainCamera
@@ -9422,7 +9423,7 @@ MonoBehaviour:
     DefaultMode: 2
   DefaultBlend:
     Style: 1
-    Time: 2
+    Time: 1
     CustomCurve:
       serializedVersion: 2
       m_Curve: []
@@ -9552,6 +9553,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3fbe17fcfc93cdd4494652fe7a56b842, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CameraManager
+--- !u!114 &1553222852
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1553222845}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bd281286fed2e6c4f9083581885a0323, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CameraRendererSwitcher
+  targetCamera: {fileID: 1553222849}
+  normalRenderer: 0
+  pcCamRenderer: 1
 --- !u!1 &1561082999
 GameObject:
   m_ObjectHideFlags: 0
@@ -10091,13 +10107,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PC_Handler
   pc_cam: {fileID: 39132454}
   fps_cam: {fileID: 1381074365}
+  cameraRendererSwitcher: {fileID: 1553222852}
   player: {fileID: 596906172}
   promptText: use
   gameInput: {fileID: 1749905429}
   mouseLook: {fileID: 1381074363}
   crosshair: {fileID: 1101112966}
   uiManager: {fileID: 299405508}
-  cameraWaitTime: 2
+  cameraWaitTime: 1
   onComputer: 0
 --- !u!1 &1651981216
 GameObject:
@@ -12484,7 +12501,7 @@ MonoBehaviour:
   m_RequiresOpaqueTextureOption: 2
   m_CameraType: 0
   m_Cameras: []
-  m_RendererIndex: -1
+  m_RendererIndex: 1
   m_VolumeLayerMask:
     serializedVersion: 2
     m_Bits: 1

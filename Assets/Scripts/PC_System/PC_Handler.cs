@@ -6,6 +6,8 @@ public class PC_Handler : MonoBehaviour, IInteractable
 {
     [SerializeField] private CinemachineCamera pc_cam;
     [SerializeField] private CinemachineCamera fps_cam;
+    [SerializeField] private CameraRendererSwitcher cameraRendererSwitcher;
+
 
     [SerializeField] private Player player;
     [SerializeField] private string promptText = "use";
@@ -55,6 +57,8 @@ public class PC_Handler : MonoBehaviour, IInteractable
         // Andere UI ausblenden
         InteractPromptManager.Instance.hidePrompt();
         crosshair.SetActive(false);
+        
+        cameraRendererSwitcher.UsePCRenderer();
     }
 
 
@@ -74,6 +78,7 @@ public class PC_Handler : MonoBehaviour, IInteractable
         StopAllCoroutines();
         // Zurück zur FPS-Kamera
         CameraManager.SwitchCamera(fps_cam);
+        cameraRendererSwitcher.UseNormalRenderer();
 
         // Spieler wieder aktivieren
         player.SetMovementEnabled(true);
