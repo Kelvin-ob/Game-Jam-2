@@ -2557,8 +2557,8 @@ Transform:
   m_GameObject: {fileID: 454010807}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 3.418, y: 1.465, z: 4.604}
-  m_LocalScale: {x: 0.4464178, y: 0.022977758, z: 0.54171}
+  m_LocalPosition: {x: 1.5513, y: 1.505, z: 5.2}
+  m_LocalScale: {x: 0.24106562, y: 0.022977758, z: 0.32963055}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -9633,7 +9633,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1432598549016973334, guid: ef46498c0aad7164f84824a99680ce24, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4151688837840211939, guid: ef46498c0aad7164f84824a99680ce24, type: 3}
       propertyPath: m_LocalPosition.x
@@ -9682,6 +9682,10 @@ PrefabInstance:
     - target: {fileID: 4824286799418954272, guid: ef46498c0aad7164f84824a99680ce24, type: 3}
       propertyPath: m_Enabled
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4824286799418954272, guid: ef46498c0aad7164f84824a99680ce24, type: 3}
+      propertyPath: 'dialogueLines.Array.data[5]'
+      value: I wonder where everybody is.
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -10344,10 +10348,26 @@ PrefabInstance:
       propertyPath: lockMovement
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 8655182484699894638, guid: 885d5b524553cc845aa8db7640058f29, type: 3}
+      propertyPath: 'dialogueLines.Array.data[2]'
+      value: But do not worry.
+      objectReference: {fileID: 0}
     - target: {fileID: 8788306208888145394, guid: 885d5b524553cc845aa8db7640058f29, type: 3}
       propertyPath: player
       value: 
       objectReference: {fileID: 1553111414}
+    - target: {fileID: 8788306208888145394, guid: 885d5b524553cc845aa8db7640058f29, type: 3}
+      propertyPath: dialogueLines.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8788306208888145394, guid: 885d5b524553cc845aa8db7640058f29, type: 3}
+      propertyPath: 'dialogueLines.Array.data[0]'
+      value: Not a keycard, but it might help us open the lockers.
+      objectReference: {fileID: 0}
+    - target: {fileID: 8788306208888145394, guid: 885d5b524553cc845aa8db7640058f29, type: 3}
+      propertyPath: 'dialogueLines.Array.data[1]'
+      value: 
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
