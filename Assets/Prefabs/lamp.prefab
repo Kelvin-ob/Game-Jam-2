@@ -328,7 +328,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8650948988259691898, guid: 185f2b9bddc5389438ba1b855d11bcfe, type: 3}
       propertyPath: m_Volume
-      value: 0.5
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8650948988259691898, guid: 185f2b9bddc5389438ba1b855d11bcfe, type: 3}
       propertyPath: m_Resource
@@ -338,6 +338,10 @@ PrefabInstance:
       propertyPath: MaxDistance
       value: 5
       objectReference: {fileID: 0}
+    - target: {fileID: 8650948988259691898, guid: 185f2b9bddc5389438ba1b855d11bcfe, type: 3}
+      propertyPath: OutputAudioMixerGroup
+      value: 
+      objectReference: {fileID: 834896277933326675, guid: 406354668962b48439e63fe4b0083a8c, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
