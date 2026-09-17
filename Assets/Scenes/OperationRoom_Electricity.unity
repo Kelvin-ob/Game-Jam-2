@@ -2395,21 +2395,26 @@ MonoBehaviour:
   phoneDialogueLines:
   - Hello?
   - Can you hear me?
-  - You turned the power back on, right?
-  - Listen to me.
-  - The things they did in here.
-  - The things they have done to US.
-  - I have been trapped in this hell for a long time.
-  - I've been looking for a way out, but i just could not find it.
-  - You are the last missing piece of my little puzzle.
-  - But you have the devil in your head.
-  - Everybody had, but they all burn in hell now.
-  - Before we get out, I must help you get rid of the devil.
-  - DON'T you dare do anything, just wait for me there.
-  - I will FREE you from that VOICE!
-  - Trust me
+  - I've been trapped down here for a long time.
+  - 'But now that you have turned the power back on '
+  - we might have a chance to get out of this wicked place.
+  - However, before we can do that,
+  - ' I must take care of one more thing.'
+  - The voice.
+  - "\u2026"
+  - "You can hear the voice, don\u2019t you?"
+  - I could hear it too, but not anymore.
+  - I got it out of my head.
+  - 'And I will get it out of yours as well.
+
+    Just stay put, alright.
+
+'
+  - Don't make this hard, for your own sake.
+  - Trust me, I have to do this.
+  - I have to stop the voice at any cost.
   typingSpeed: 0.05
-  displayDuration: 3
+  displayDuration: 1
   timeBetweenLines: 1
   promptText: Answer
   audioSource: {fileID: 461573940}

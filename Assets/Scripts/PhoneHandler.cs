@@ -61,32 +61,43 @@ public class PhoneHandler : MonoBehaviour, IInteractable
         hasAnswered = true;
         StopRinging();
 
+        if (player == null)
+        {
+            Debug.LogWarning("Player is missing in PhoneHandler.");
+            return;
+        }
+
         if (npcVoiceManager == null)
         {
             Debug.LogWarning("NPCVoiceManager is missing for phone dialogue.");
             return;
         }
 
+        // Bewegung SOFORT sperren
+        player.SetMovementEnabled(false);
+
         StartCoroutine(PlayPhoneDialogueRoutine());
     }
 
     private IEnumerator PlayPhoneDialogueRoutine()
     {
-        if (player != null)
-        {
-            player.SetMovementEnabled(false);
-        }
+        npcVoiceManager.ShowDialogue(
+            phoneDialogueLines,
+            typingSpeed,
+            displayDuration,
+            timeBetweenLines
+        );
 
-        npcVoiceManager.ShowDialogue(phoneDialogueLines);
-
-        // warten, bis der Dialog fertig ist
+        // Warten, bis der komplette Dialog fertig ist
         yield return new WaitUntil(() => !npcVoiceManager.IsVoiceActive);
 
+        // Bewegung wieder erlauben
         if (player != null)
         {
             player.SetMovementEnabled(true);
         }
     }
+
 
     public void OnFocus()
     {

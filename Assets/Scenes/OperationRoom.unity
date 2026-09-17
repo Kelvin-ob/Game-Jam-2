@@ -9633,7 +9633,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1432598549016973334, guid: ef46498c0aad7164f84824a99680ce24, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4151688837840211939, guid: ef46498c0aad7164f84824a99680ce24, type: 3}
       propertyPath: m_LocalPosition.x
@@ -10293,10 +10293,34 @@ PrefabInstance:
       propertyPath: player
       value: 
       objectReference: {fileID: 1553111414}
+    - target: {fileID: 1023526002291812809, guid: 885d5b524553cc845aa8db7640058f29, type: 3}
+      propertyPath: 'dialogueLines.Array.data[0]'
+      value: There it is, splendid.
+      objectReference: {fileID: 0}
+    - target: {fileID: 1023526002291812809, guid: 885d5b524553cc845aa8db7640058f29, type: 3}
+      propertyPath: 'dialogueLines.Array.data[1]'
+      value: Let us see if it works.
+      objectReference: {fileID: 0}
     - target: {fileID: 1647825743267595064, guid: 885d5b524553cc845aa8db7640058f29, type: 3}
       propertyPath: player
       value: 
       objectReference: {fileID: 1553111414}
+    - target: {fileID: 1647825743267595064, guid: 885d5b524553cc845aa8db7640058f29, type: 3}
+      propertyPath: dialogueLines.Array.size
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 1647825743267595064, guid: 885d5b524553cc845aa8db7640058f29, type: 3}
+      propertyPath: 'dialogueLines.Array.data[2]'
+      value: But I think we can turn the power on.
+      objectReference: {fileID: 0}
+    - target: {fileID: 1647825743267595064, guid: 885d5b524553cc845aa8db7640058f29, type: 3}
+      propertyPath: 'dialogueLines.Array.data[3]'
+      value: The ventilation system connects this room with the generator room
+      objectReference: {fileID: 0}
+    - target: {fileID: 1647825743267595064, guid: 885d5b524553cc845aa8db7640058f29, type: 3}
+      propertyPath: 'dialogueLines.Array.data[5]'
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 5859249627544341070, guid: 885d5b524553cc845aa8db7640058f29, type: 3}
       propertyPath: m_LocalPosition.x
       value: 1.18459

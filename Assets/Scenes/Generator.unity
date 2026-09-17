@@ -1280,10 +1280,9 @@ MonoBehaviour:
   triggerId: voice_trigger_when_spawning_in_genroom
   triggerOnce: 1
   dialogueLines:
-  - Good.
-  - The generator looks out of shape.
-  - It is probably empty.
-  - On your left is a gas can. Take it and fill up the Generator.
+  - Here we are.
+  - The generator looks out of shape, it probably needs fuel.
+  - On your left is a jerrycan. Take it and fill up the generator.
   typingSpeed: 0.05
   displayDuration: 1.5
   timeBetweenLines: 0.5
@@ -2785,6 +2784,9 @@ MonoBehaviour:
   fullText: Generator is full
   activateText: Press E to start generator
   activatedText: Generator is running
+  endDialogue:
+  - 'Perfect, now turn the generator on '
+  - and let us go back to see if we can open the door.
   progressUI: {fileID: 915869888}
   progressCircle: {fileID: 333672175}
   refuelAudioSource: {fileID: 1948258896}

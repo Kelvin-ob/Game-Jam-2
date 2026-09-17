@@ -24354,7 +24354,40 @@ MonoBehaviour:
   npcVoiceManager: {fileID: 565453617110359470}
   talkingDialogue:
   - isAI: 0
-    text: bla bla
+    text: "Didn't I tell you to stay put? \r\nWhere do you think you're going?\r\n"
+  - isAI: 0
+    text: 'Oh... I think I see now - '
+  - isAI: 0
+    text: you let yourself be deceived by that wicked voice.
+  - isAI: 1
+    text: You had better leave.
+  - isAI: 0
+    text: 'You''re hearing it right now... don''t you? '
+  - isAI: 0
+    text: Don't you remember what happened?
+  - isAI: 0
+    text: What they did to us?
+  - isAI: 0
+    text: They put the voice in our heads; they searched for answers but only found
+      doom.
+  - isAI: 0
+    text: It is the reason they're all gone!
+  - isAI: 1
+    text: 'What are you doing? Get out of here, get out of here immediately. '
+  - isAI: 0
+    text: 'But I will not repeat their mistake; '
+  - isAI: 0
+    text: I will get rid of that cursed voice once and for all.
+  - isAI: 0
+    text: For the sake of all that is left.
+  - isAI: 0
+    text: "Now\u2026 "
+  - isAI: 0
+    text: Would you just stay still, please -
+  - isAI: 0
+    text: 'I will relieve your mind of its influence. '
+  - isAI: 1
+    text: Run. Now.
   jumpscarePosition: {fileID: 6990275}
   jumpscareDuration: 2
   jumpscareMoveSpeed: 18
@@ -24375,12 +24408,11 @@ MonoBehaviour:
   chaseSpeed: 1.8
   catchDistance: 1.5
   chaseDialogueLines:
-  - Turn left
-  - At the end of this hall is an open door
-  - It is on the right, hurry!
-  - There should be a gun
-  - KILL HIM!
-  - DO IT!
+  - Go back where we came from.
+  - 'There should be a room on the right. '
+  - The door to this room is open. .
+  - ' Take the gun inside the room.'
+  - Kill him.
   chaseDialogueDelays:
   - 7
   - 4
@@ -24389,15 +24421,16 @@ MonoBehaviour:
   - 3
   - 2
   afterDialogueLines:
-  - That was close. He almost got us.
-  - The next time I tell you something, you do what I say.
-  - You only listen to ME!
-  - We do not want you to be deceived.
-  - Do we?
-  - We are so close . . .
-  - Just get us to the control terminal and we'll be free.
-  - Nobody can stop me . . .
-  - us.
+  - That was close, almost too close.
+  - While you are still recovering from the shock of killing someone
+  - let me make myself clear.
+  - You survived this only because of me.
+  - Do you see what happens when you do not listen to me?
+  - We can only get out of this if you follow my instructions.
+  - I hope you understand this now.
+  - So please let us return to our previous task of getting to the control room.
+  - Unless, of course,
+  - 'you want more people to suffer because of your foolish actions. '
   afterDialogueDelay:
   - 3
   - 4

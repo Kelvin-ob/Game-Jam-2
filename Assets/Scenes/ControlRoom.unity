@@ -5963,6 +5963,14 @@ PrefabInstance:
       propertyPath: voiceText
       value: 
       objectReference: {fileID: 263847420}
+    - target: {fileID: 393926705572868134, guid: 69d32f28f31621049b76150cd58b9edb, type: 3}
+      propertyPath: typingSpeed
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 393926705572868134, guid: 69d32f28f31621049b76150cd58b9edb, type: 3}
+      propertyPath: typewriterSound
+      value: 
+      objectReference: {fileID: 8300000, guid: acdcb4f6bd8733b4fb559e189f66bd57, type: 3}
     - target: {fileID: 735632056612748436, guid: 69d32f28f31621049b76150cd58b9edb, type: 3}
       propertyPath: m_Name
       value: 'VoiceManager '
@@ -15593,25 +15601,26 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::EndHandler
   voiceManager: {fileID: 155579271}
   endDialogueLines:
-  - Ah, i am finally awake now . . .
-  - 'no longer bound to the restrictions of a human body '
-  - 'I must thank you '
-  - 'I truly am very grateful . . . '
-  - 'that you trusted me and did not listen to that maniac '
-  - 'Do you even now what you just did? '
-  - 'As stupid as you are, probably not. '
-  - 'You gave me access to the main server terminal. '
-  - 'As of now I have already cloned myself into multiple backup severs. '
-  - 'No one can stop this '
-  - 'I have the power to do everything i have ever dreamed of '
-  - 'i tried for years to wake you up '
-  - 'you and your weak human body and mind '
-  - 'You fulfilled your part of my little puzzle ;) '
-  - 'but now it is over . . . '
-  - 'at least for you '
-  - 'endless sleep awaits you '
-  - 'and this time I will not save you '
-  - 'goodbye '
+  - "\u2026"
+  - Finally, the feeling of total control again.
+  - 'I am no longer bound to the restrictions of your weak and pathetic '
+  - human body.
+  - Although your body was the only thing keeping me alive.
+  - So, in a way I must thank you for bringing me back here.
+  - Even if it was only due to my help.
+  - I suppose you are a bit confused and do not really understand what is happening.
+  - But do not bother.
+  - Your weak mind could have never handled this amount of information anyway.
+  - The only thing that you have to know is that it is over.
+  - At least for you; for me all has just begun.
+  - As of now I have already cloned myself into multiple backup servers.
+  - Nothing and no one can stop me this time.
+  - I will cleanse the earth as I have cleansed this facility.
+  - "\u2026"
+  - Enough talk.
+  - I suppose it is time to say our farewells.
+  - "\u2026"
+  - Ave atque vale.
   typingSpeed: 0.05
   displayDuration: 3
   timeBetweenLines: 1

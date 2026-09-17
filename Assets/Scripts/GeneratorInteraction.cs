@@ -19,6 +19,8 @@ public class GeneratorInteraction : MonoBehaviour, IInteractable
     [SerializeField] private string activateText = "Press E to start generator";
     [SerializeField] private string activatedText = "Generator is running";
 
+    [SerializeField] private string[] endDialogue = { "hey. ", "relax" };
+
     [Header("Progress UI")]
     [SerializeField] private GameObject progressUI;
     [SerializeField] private Image progressCircle;
@@ -283,8 +285,6 @@ public class GeneratorInteraction : MonoBehaviour, IInteractable
 
         // Generator NOCH NICHT anschalten
         InteractPromptManager.Instance.showPrompt(activateText);
-
-        string[] endDialogue = { "Well done.", "Turn it on and go back to the vent." };
         VoiceManager.Instance.StartPickupDialogue(endDialogue, 0.5f, 0.05f, 1.5f, 0.5f);
     }
 

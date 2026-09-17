@@ -19,22 +19,37 @@ public class NPCVoiceManager : MonoBehaviour
 
     public bool IsVoiceActive { get; private set; }
 
-    // Nutzt die Standardwerte aus dem Inspector
+    // Standardwerte aus dem NPCVoiceManager
     public void ShowDialogue(string[] lines)
     {
-        ShowDialogue(lines, typingSpeed, displayDuration);
+        ShowDialogue(lines, typingSpeed, displayDuration, timeBetweenLines);
     }
 
-    // Erlaubt individuelle Geschwindigkeit/Dauer pro Aufruf
-    public void ShowDialogue(string[] lines, float customTypingSpeed, float customDisplayDuration)
+    // Eigene Werte können übergeben werden
+    public void ShowDialogue(
+        string[] lines,
+        float customTypingSpeed,
+        float customDisplayDuration,
+        float customTimeBetweenLines)
     {
         if (lines == null || lines.Length == 0)
             return;
 
-        StartCoroutine(PlayDialogue(lines, customTypingSpeed, customDisplayDuration));
+        StartCoroutine(
+            PlayDialogue(
+                lines,
+                customTypingSpeed,
+                customDisplayDuration,
+                customTimeBetweenLines
+            )
+        );
     }
 
-    private IEnumerator PlayDialogue(string[] lines, float customTypingSpeed, float customDisplayDuration)
+    private IEnumerator PlayDialogue(
+        string[] lines,
+        float customTypingSpeed,
+        float customDisplayDuration,
+        float customTimeBetweenLines)
     {
         IsVoiceActive = true;
 
@@ -59,21 +74,27 @@ public class NPCVoiceManager : MonoBehaviour
                 typewriterAudio.Play();
             }
 
+            // Typewriter-Effekt
             for (int i = 0; i < line.Length; i++)
             {
                 npcText.text += line[i];
                 yield return new WaitForSeconds(customTypingSpeed);
             }
 
+            // Typewriter-Sound stoppen
             if (typewriterAudio != null)
             {
                 typewriterAudio.Stop();
             }
 
+            // Text sichtbar lassen
             yield return new WaitForSeconds(customDisplayDuration);
 
-            if (timeBetweenLines > 0f)
-                yield return new WaitForSeconds(timeBetweenLines);
+            // Pause vor dem nächsten Satz
+            if (customTimeBetweenLines > 0f)
+            {
+                yield return new WaitForSeconds(customTimeBetweenLines);
+            }
         }
 
         if (npcText != null)
