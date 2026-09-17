@@ -19908,6 +19908,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: CrosshairCanvas
       objectReference: {fileID: 0}
+    - target: {fileID: 5789251179919680942, guid: 1b78b3d2baf8f54429a9f95698d41a6c, type: 3}
+      propertyPath: mouseLook
+      value: 
+      objectReference: {fileID: 1259061820}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
