@@ -489,6 +489,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: CrosshairCanvas
       objectReference: {fileID: 0}
+    - target: {fileID: 5789251179919680942, guid: 1b78b3d2baf8f54429a9f95698d41a6c, type: 3}
+      propertyPath: mouseLook
+      value: 
+      objectReference: {fileID: 1529338777}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -1978,6 +1982,7 @@ MonoBehaviour:
   mouseSens: 6
   playerBody: {fileID: 1993299724}
   gameInput: {fileID: 1166270239}
+  canLook: 0
 --- !u!114 &1529338778
 MonoBehaviour:
   m_ObjectHideFlags: 0

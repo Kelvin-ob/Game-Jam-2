@@ -50,4 +50,9 @@ public class MouseLook : MonoBehaviour
         canLook = newcanLook;
     }
 
+    public void SetSensitivity(float newSens)
+    {
+        mouseSens = newSens;
+    }
+
 }

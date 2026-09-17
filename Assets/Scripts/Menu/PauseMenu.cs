@@ -3,12 +3,16 @@ using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using UnityEngine.Audio;
+using TMPro;
 public class PauseMenu : MonoBehaviour
 {
     public GameObject container;
     public GameObject optionsContainer;
     public Slider masterVolume, musicVolume, sfxVolume;
+    public Slider mouseSensitivity;
     public AudioMixer mainAudioMixer;
+    public MouseLook mouseLook;
+    public TMP_Text mouseSensitivityValueText;
 
 
     public void ChangeMasterVolume()
@@ -24,6 +28,12 @@ public class PauseMenu : MonoBehaviour
     public void ChangeSFXVolume()
     {
         mainAudioMixer.SetFloat("SFXVolumeParam", sfxVolume.value);
+    }
+
+    public void ChangeMouseSensitivity()
+    {
+        mouseSensitivityValueText.text = mouseSensitivity.value.ToString("F1");
+        mouseLook.SetSensitivity(mouseSensitivity.value);
     }
 
     void Update()
@@ -59,8 +69,8 @@ public class PauseMenu : MonoBehaviour
         container.SetActive(false);
         Time.timeScale = 1f;
 
-        Cursor.lockState = CursorLockMode.None;
-        Cursor.visible = true;
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
     }
 
     public void MainMenuButton()
